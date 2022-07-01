@@ -33,7 +33,7 @@ public class UserDao {
      * Query부분은 DB에 SQL요청을 할 쿼리문을 의미하는데, 대부분의 경우 동적 쿼리(실행할 때 값이 주입되어야 하는 쿼리) 형태입니다.
      * 그래서 Query의 동적 쿼리에 입력되어야 할 값들이 필요한데 그것이 Params부분입니다.
      * Params부분은 클라이언트의 요청에서 제공하는 정보(~~~~Req.java에 있는 정보)로 부터 getXXX를 통해 값을 가져옵니다. ex) getEmail -> email값을 가져옵니다.
-     *      Notice! get과 get의 대상은 카멜케이스로 작성됩니다. ex) item -> getItem, password -> getPassword, email -> getEmail, userIdx -> getUserIdx
+     *      Notice! get과 get의 대상은 카멜케이스로 작성됩니다. ex) item -> getItem, password -> getPassword, email -> getEmail, userId -> getUserId
      * 그 다음 GET, POST, PATCH 메소드에 따라 jabcTemplate의 적절한 함수(queryForObject, query, update)를 실행시킵니다(DB요청이 일어납니다.).
      *      Notice!
      *      POST, PATCH의 경우 jdbcTemplate.update
@@ -63,7 +63,7 @@ public class UserDao {
         // 즉 DB의 User Table에 (phoneNumber, password, nickname)값을 가지는 유저 데이터를 삽입(생성)한다.
 
         String lastInserIdQuery = "select last_insert_id()"; // 가장 마지막에 삽입된(생성된) id값을 가져온다.
-        return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 유저의 userIdx번호를 반환한다.
+        return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 유저의 userId번호를 반환한다.
     }
 
 //    // 휴대폰 번호 확인
@@ -75,23 +75,23 @@ public class UserDao {
 //                checkPhoneNumberParams); // checkPhoneNumberQuery, checkPhoneNumberParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
 //    }
 
-//    // 회원정보 변경
-//    public int modifyUserName(PatchUserReq patchUserReq) {
-//        String modifyUserNameQuery = "update User set nickname = ? where userIdx = ? "; // 해당 userIdx를 만족하는 User를 해당 nickname으로 변경한다.
-//        Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserIdx()}; // 주입될 값들(nickname, userIdx) 순
-//
-//        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
-//    }
-//
-//
+    // 회원정보 변경
+    public int modifyUserName(PatchUserReq patchUserReq) {
+        String modifyUserNameQuery = "update User set nickname = ? where userId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
+        Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserId()}; // 주입될 값들(nickname, userId) 순
+
+        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
+
+
 //    // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
 //    public User getPwd(PostLoginReq postLoginReq) {
-//        String getPwdQuery = "select userIdx, password,email,nickname from User where email = ?"; // 해당 email을 만족하는 User의 정보들을 조회한다.
+//        String getPwdQuery = "select userId, password,email,nickname from User where email = ?"; // 해당 email을 만족하는 User의 정보들을 조회한다.
 //        String getPwdParams = postLoginReq.getPhoneNumber(); // 주입될 email값을 클라이언트의 요청에서 주어진 정보를 통해 가져온다.
 //
 //        return this.jdbcTemplate.queryForObject(getPwdQuery,
 //                (rs, rowNum) -> new User(
-//                        rs.getInt("userIdx"),
+//                        rs.getInt("userId"),
 //                        rs.getString("password"),
 //                        rs.getString("nickname")
 //                ), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
@@ -132,9 +132,9 @@ public class UserDao {
                 getUsersByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-    // 해당 userIdx를 갖는 유저조회
+    // 해당 userId를 갖는 유저조회
     public GetUserRes getUser(int userId) {
-        String getUserQuery = "select * from User where userId = ?"; // 해당 userIdx를 만족하는 유저를 조회하는 쿼리문
+        String getUserQuery = "select * from User where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
         int getUserParams = userId;
         return this.jdbcTemplate.queryForObject(getUserQuery,
                 (rs, rowNum) -> new GetUserRes(

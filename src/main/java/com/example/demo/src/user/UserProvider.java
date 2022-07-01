@@ -1,9 +1,7 @@
 package com.example.demo.src.user;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.config.secret.Secret;
 import com.example.demo.src.user.model.*;
-import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,8 +84,8 @@ public class UserProvider {
     // 해당 nickname을 갖는 User들의 정보 조회
     public List<GetUserRes> getUsersByNickname(String nickname) throws BaseException {
         try {
-            List<GetUserRes> getUsersRes = userDao.getUsersByNickname(nickname);
-            return getUsersRes;
+            List<GetUserRes> getUserRes = userDao.getUsersByNickname(nickname);
+            return getUserRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

@@ -118,15 +118,15 @@ public class UserController {
                 return new BaseResponse<>(getUsersRes);
             }
             // query string인 nickname이 있을 경우, 조건을 만족하는 유저정보들을 불러온다.
-            List<GetUserRes> getUsersRes = userProvider.getUsersByNickname(nickname);
-            return new BaseResponse<>(getUsersRes);
+            List<GetUserRes> GetUserRes = userProvider.getUsersByNickname(nickname);
+            return new BaseResponse<>(GetUserRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
     /**
      * 회원 1명 조회 API
-     * [GET] /users/:userIdx
+     * [GET] /users/:userId
      */
     // Path-variable
     @ResponseBody
@@ -145,32 +145,34 @@ public class UserController {
 
     }
 
-//    /**
-//     * 유저정보변경 API
-//     * [PATCH] /users/:userIdx
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{userIdx}")
-//    public BaseResponse<String> modifyUserName(@PathVariable("userIdx") int userIdx, @RequestBody User user) {
-//        try {
-///**
-//  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-//            //jwt에서 idx 추출.
-//            int userIdxByJwt = jwtService.getUserIdx();
-//            //userIdx와 접근한 유저가 같은지 확인
-//            if(userIdx != userIdxByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //같다면 유저네임 변경
-//  **************************************************************************
-// */
-//            PatchUserReq patchUserReq = new PatchUserReq(userIdx, user.getNickname());
-//            userService.modifyUserName(patchUserReq);
-//
-//            String result = "회원정보가 수정되었습니다.";
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    /**
+     * 유저 닉네임 변경 API
+     * [PATCH] /users/:userId
+     *
+     * 유저정보변경 API
+     * [PATCH] /users/:userId
+     */
+    @ResponseBody
+    @PatchMapping("/{userId}")
+    public BaseResponse<String> modifyUserName(@PathVariable("userId") int userId, @RequestBody User user) {
+        try {
+/*
+  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
+            //jwt에서 idx 추출.
+            int userIdByJwt = jwtService.getUserIdx();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+  **************************************************************************
+ */
+            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
+            userService.modifyUserName(patchUserReq);
+            String result = "회원정보가 수정되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
