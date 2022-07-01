@@ -124,27 +124,27 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-//    /**
-//     * 회원 1명 조회 API
-//     * [GET] /users/:userIdx
-//     */
-//    // Path-variable
-//    @ResponseBody
-//    @GetMapping("/{userIdx}") // (GET) http://simhani1.shop:9000/app/users/:userId
-//    public BaseResponse<GetUserRes> getUser(@PathVariable("userIdx") int userIdx) {
-//        // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
-//        //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
-//        //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
-//        // Get Users
-//        try {
-//            GetUserRes getUserRes = userProvider.getUser(userIdx);
-//            return new BaseResponse<>(getUserRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//
-//    }
-//
+    /**
+     * 회원 1명 조회 API
+     * [GET] /users/:userIdx
+     */
+    // Path-variable
+    @ResponseBody
+    @GetMapping("/{userId}") // (GET) http://simhani1.shop:9000/app/users/:userId
+    public BaseResponse<GetUserRes> getUser(@PathVariable("userId") int userId) {
+        // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
+        //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
+        //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
+        // Get Users
+        try {
+            GetUserRes getUserRes = userProvider.getUser(userId);
+            return new BaseResponse<>(getUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
 //    /**
 //     * 유저정보변경 API
 //     * [PATCH] /users/:userIdx

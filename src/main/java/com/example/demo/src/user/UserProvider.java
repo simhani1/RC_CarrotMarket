@@ -94,14 +94,14 @@ public class UserProvider {
     }
 
 
-//    // 해당 userIdx를 갖는 User의 정보 조회
-//    public GetUserRes getUser(int userIdx) throws BaseException {
-//        try {
-//            GetUserRes getUserRes = userDao.getUser(userIdx);
-//            return getUserRes;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+    // 해당 userIdx를 갖는 User의 정보 조회
+    public GetUserRes getUser(int userId) throws BaseException {
+        try {
+            GetUserRes getUserRes = userDao.getUser(userId);
+            return getUserRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 
 }
