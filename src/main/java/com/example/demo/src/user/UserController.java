@@ -149,8 +149,6 @@ public class UserController {
      * 유저 닉네임 변경 API
      * [PATCH] /users/:userId
      *
-     * 유저정보변경 API
-     * [PATCH] /users/:userId
      */
     @ResponseBody
     @PatchMapping("/{userId}")
@@ -167,9 +165,37 @@ public class UserController {
             //같다면 유저네임 변경
   **************************************************************************
  */
-            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
+            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname(), user.getStatus());
             userService.modifyUserName(patchUserReq);
             String result = "회원정보가 수정되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+    /**
+     * 회원탈퇴 API
+     * [PATCH] /users/withdraw/:userId
+     *
+     */
+    @ResponseBody
+    @PatchMapping("/withdraw/{userId}")
+    public BaseResponse<String> modifyUserStatus(@PathVariable("userId") int userId, @RequestBody User user) {
+        try {
+/*
+  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
+            //jwt에서 idx 추출.
+            int userIdByJwt = jwtService.getUserIdx();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+  **************************************************************************
+ */
+            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname(), user.getStatus());
+            userService.modifyUserStatus(patchUserReq);
+            String result = "탈퇴처리 되었습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

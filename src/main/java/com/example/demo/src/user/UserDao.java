@@ -83,6 +83,13 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
+    // 회원탈퇴 처리
+    public int modifyUserStatus(PatchUserReq patchUserReq) {
+        String modifyUserStatusQuery = "update User set status = ? where userId = ? "; // 해당 userId를 만족하는 User를 해당 status로 변경한다.
+        Object[] modifyUserStatusParams = new Object[]{patchUserReq.getStatus(), patchUserReq.getUserId()}; // 주입될 값들(status, userId) 순
+
+        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
 
 //    // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
 //    public User getPwd(PostLoginReq postLoginReq) {

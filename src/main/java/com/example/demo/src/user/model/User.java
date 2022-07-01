@@ -15,4 +15,6 @@ public class User {
     private String nickname;
     private String phoneNumber;
     private String password;
+    private String status;
+    private String profileImg;
 }
