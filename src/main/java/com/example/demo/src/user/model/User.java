@@ -14,14 +14,14 @@ public class User {
     public User(int userId, String nickname, String telephoneNumber, String password) {
         this.userId = userId;
         this.nickname = nickname;
-        this.telephoneNumber = telephoneNumber;
-        this.password = password;
+        this.telephoneNum = telephoneNumber;
+        this.pwd = password;
     }
 
     private int userId;
     private String nickname;
-    private String telephoneNumber;
-    private String password;
+    private String telephoneNum;
+    private String pwd;
     private String status;
     private String profileImg;
 }

@@ -42,15 +42,15 @@ public class UserProvider {
     // 로그인(password 검사)
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException {
         User user = userDao.getPwd(postLoginReq);
-        String password;
+        String pwd;
         try {
-            password = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getPassword()); // 암호화
+            pwd = new AES128(Secret.USER_INFO_PASSWORD_KEY).decrypt(user.getPwd()); // 암호화
             // 회원가입할 때 비밀번호가 암호화되어 저장되었기 떄문에 로그인을 할때도 암호화된 값끼리 비교를 해야합니다.
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
 
-        if (postLoginReq.getPassword().equals(password)) { //비말번호가 일치한다면 userId를 가져온다.
+        if (postLoginReq.getPwd().equals(pwd)) { //비말번호가 일치한다면 userId를 가져온다.
             int userId = userDao.getPwd(postLoginReq).getUserId();
             return new PostLoginRes(userId);
 //  *********** 해당 부분은 7주차 - JWT 수업 후 주석해제 및 대체해주세요!  **************** //

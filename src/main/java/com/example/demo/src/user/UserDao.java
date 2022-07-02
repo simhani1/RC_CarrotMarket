@@ -33,7 +33,7 @@ public class UserDao {
      * Query부분은 DB에 SQL요청을 할 쿼리문을 의미하는데, 대부분의 경우 동적 쿼리(실행할 때 값이 주입되어야 하는 쿼리) 형태입니다.
      * 그래서 Query의 동적 쿼리에 입력되어야 할 값들이 필요한데 그것이 Params부분입니다.
      * Params부분은 클라이언트의 요청에서 제공하는 정보(~~~~Req.java에 있는 정보)로 부터 getXXX를 통해 값을 가져옵니다. ex) getEmail -> email값을 가져옵니다.
-     *      Notice! get과 get의 대상은 카멜케이스로 작성됩니다. ex) item -> getItem, password -> getPassword, email -> getEmail, userId -> getUserId
+     *      Notice! get과 get의 대상은 카멜케이스로 작성됩니다. ex) item -> getItem, pwd -> getPassword, email -> getEmail, userId -> getUserId
      * 그 다음 GET, POST, PATCH 메소드에 따라 jabcTemplate의 적절한 함수(queryForObject, query, update)를 실행시킵니다(DB요청이 일어납니다.).
      *      Notice!
      *      POST, PATCH의 경우 jdbcTemplate.update
@@ -59,8 +59,8 @@ public class UserDao {
         String createUserQuery = "insert into User (nickname, telephoneNum, pwd) VALUES (?,?,?)"; // 실행될 동적 쿼리문, 본인의 테이블 명에 맞게 수정을 하면 됩니다.
         Object[] createUserParams = new Object[]{postUserReq.getNickname(), postUserReq.getPhoneNumber(), postUserReq.getPassword()}; // 동적 쿼리의 ?부분에 주입될 값
         this.jdbcTemplate.update(createUserQuery, createUserParams);
-        // phoneNumber -> postUserReq.getPhoneNumber(), password -> postUserReq.getPassword(), nickname -> postUserReq.getNickname() 로 매핑(대응)시킨다음 쿼리문을 실행한다.
-        // 즉 DB의 User Table에 (phoneNumber, password, nickname)값을 가지는 유저 데이터를 삽입(생성)한다.
+        // phoneNumber -> postUserReq.getPhoneNumber(), pwd -> postUserReq.getPassword(), nickname -> postUserReq.getNickname() 로 매핑(대응)시킨다음 쿼리문을 실행한다.
+        // 즉 DB의 User Table에 (phoneNumber, pwd, nickname)값을 가지는 유저 데이터를 삽입(생성)한다.
 
         String lastInserIdQuery = "select last_insert_id()"; // 가장 마지막에 삽입된(생성된) id값을 가져온다.
         return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 유저의 userId번호를 반환한다.
@@ -93,14 +93,14 @@ public class UserDao {
 
     // 로그인: 해당 휴대폰 번호에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
     public User getPwd(PostLoginReq postLoginReq) {
-        String getPwdQuery = "select userId, pwd, telephoneNumber, nickname from User where telephoneNumber = ?";
-        String getPwdParams = postLoginReq.getTelephoneNumber();
+        String getPwdQuery = "select userId, pwd, telephoneNum, nickname from User where telephoneNum = ?";
+        String getPwdParams = postLoginReq.getTelephoneNum();
         return this.jdbcTemplate.queryForObject(getPwdQuery,
                 (rs, rowNum) -> new User(
                         rs.getInt("userId"),
                         rs.getString("nickname"),
-                        rs.getString("phoneNumber"),
-                        rs.getString("password")
+                        rs.getString("telephoneNum"),
+                        rs.getString("pwd")
                 ), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
                 getPwdParams
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
