@@ -21,4 +21,5 @@ public class GetUserBadgeRes {
     private int userId;
     private String nickname;
     private String badgeName;
+    private String badgeImgUrl;
 }
