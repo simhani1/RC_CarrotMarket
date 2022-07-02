@@ -19,7 +19,7 @@ import lombok.Setter;
  */
 public class GetUserBadgeRes {
     private int userId;
-    private String nickname;
-    private String badgeName;
-    private String badgeImgUrl;
+    //private String nickname;
+    //private String badgeName;
+    //private String badgeImgUrl;
 }

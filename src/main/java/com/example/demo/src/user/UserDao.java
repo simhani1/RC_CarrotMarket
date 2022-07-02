@@ -158,14 +158,14 @@ public class UserDao {
 
     // 해당 userId를 갖는 유저의 획득 뱃지 조회
     public GetUserBadgeRes getUserBadge(int userId) {
-        String getUserBadgeQuery = "select Badge.userId, User.nickname, BadgeCategory.badgeName, BadgeCategory.badgeImgUrl from Badge, User, BadgeCategory where User.userId = ? AND Badge.userId = ? AND Badge.badgeId = BadgeCategory.badgeId"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
+        String getUserBadgeQuery = "select badgeId from Badge where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
         int getUserBadgeParams = userId;
         return this.jdbcTemplate.queryForObject(getUserBadgeQuery,
                 (rs, rowNum) -> new GetUserBadgeRes(
-                        rs.getInt("userId"),
-                        rs.getString("nickname"),
-                        rs.getString("badgeName"),
-                        rs.getString("badgeImgUrl")),
+                        rs.getInt("userId")),
+                        //rs.getString("nickname"),
+                        //rs.getString("badgeName"),
+                        //rs.getString("badgeImgUrl")),
                 getUserBadgeParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 }
