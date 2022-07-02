@@ -40,6 +40,12 @@ public class UserService {
     }
     // ******************************************************************************
 
+
+
+
+
+    //////////////////////////////////////  POST
+
     // 회원가입(POST)
     public PostUserRes createUser(PostUserReq postUserReq) throws BaseException {
         // 중복 확인: 해당 휴대폰 번호를을 가진 유저가 있는지 확인합니다. 중복될 경우, 에러 메시지를 보냅니다.
@@ -68,6 +74,8 @@ public class UserService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    //////////////////////////////////////  PATCH
 
     // 회원정보 수정(Patch)
     public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {

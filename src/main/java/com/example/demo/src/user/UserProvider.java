@@ -39,6 +39,10 @@ public class UserProvider {
     // ******************************************************************************
 
 
+
+
+    //////////////////////////////////////  POST
+
     // 로그인(password 검사)
     public PostLoginRes logIn(PostLoginReq postLoginReq) throws BaseException {
         User user = userDao.getPwd(postLoginReq);
@@ -62,6 +66,7 @@ public class UserProvider {
             throw new BaseException(FAILED_TO_LOGIN);
         }
     }
+
 //
 //    // 해당 휴대폰 번호가 이미 User Table에 존재하는지 확인
 //    public int checkPhoneNumber(String phoneNumber) throws BaseException {
@@ -72,6 +77,7 @@ public class UserProvider {
 //        }
 //    }
 
+    //////////////////////////////////////  GET
 
     // User들의 정보를 조회
     public List<GetUserRes> getUsers() throws BaseException {
