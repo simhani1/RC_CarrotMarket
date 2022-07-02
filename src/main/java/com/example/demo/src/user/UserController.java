@@ -48,6 +48,8 @@ public class UserController {
 
     // ******************************************************************************
 
+    //////////////////////////////////////  POST
+
     /**
      * 회원가입 API
      * [POST] /users
@@ -92,6 +94,7 @@ public class UserController {
         }
     }
 
+    //////////////////////////////////////  GET
 
     /**
      * 모든 회원들의  조회 API
@@ -140,8 +143,28 @@ public class UserController {
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
-
     }
+
+    /**
+     * 프로필 조회 API
+     * [GET] /users/profile/:userId
+     */
+    // Path-variable
+    @ResponseBody
+    @GetMapping("/profile/{userId}") // (GET) http://simhani1.shop:9000/app/users/:userId
+    public BaseResponse<GetUserRes> getUserProfile(@PathVariable("userId") int userId) {
+        // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
+        //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
+        //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
+        // Get Users
+        try {
+            GetUserRes getUserRes = userProvider.getUserProfile(userId);
+            return new BaseResponse<>(getUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 
 //    /**
 //     * 획득한 뱃지 조회 API
@@ -158,6 +181,8 @@ public class UserController {
 //            return new BaseResponse<>((exception.getStatus()));
 //        }
 //    }
+
+    //////////////////////////////////////  PATCH
 
     /**
      * 유저 닉네임 변경 API

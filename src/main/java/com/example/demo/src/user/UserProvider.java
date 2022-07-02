@@ -104,6 +104,16 @@ public class UserProvider {
         }
     }
 
+    // 해당 userId를 갖는 User의 프로필 조회
+    public GetUserRes getUserProfile(int userId) throws BaseException {
+        try {
+            GetUserRes getUserRes = userDao.getUserProfile(userId);
+            return getUserRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
 //    // 해당 userId를 갖는 User의 획득 뱃지 조회
 //    public List<GetUserBadgeRes> getUserBadges(int userId) throws BaseException {
 //        try {
