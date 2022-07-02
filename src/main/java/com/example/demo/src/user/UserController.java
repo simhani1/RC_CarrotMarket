@@ -179,9 +179,9 @@ public class UserController {
             //같다면 유저네임 변경
   **************************************************************************
  */
-            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname(), user.getStatus());
+            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
             userService.modifyUserName(patchUserReq);
-            String result = "회원정보가 수정되었습니다.";
+            String result = "닉네임이 변경되었습니다.";
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));

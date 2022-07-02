@@ -75,7 +75,7 @@ public class UserDao {
 //                checkPhoneNumberParams); // checkPhoneNumberQuery, checkPhoneNumberParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
 //    }
 
-    // 회원정보 변경
+    // 닉네임 변경
     public int modifyUserName(PatchUserReq patchUserReq) {
         String modifyUserNameQuery = "update User set nickname = ? where userId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
         Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserId()}; // 주입될 값들(nickname, userId) 순

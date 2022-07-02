@@ -14,4 +14,9 @@ public class PatchUserReq {
     private int userId;
     private String nickname;
     private String status;
+
+    public PatchUserReq(int userId, String nickname) {
+        this.userId = userId;
+        this.nickname = nickname;
+    }
 }
