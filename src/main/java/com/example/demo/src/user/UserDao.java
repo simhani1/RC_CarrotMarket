@@ -158,9 +158,7 @@ public class UserDao {
 
     // 해당 userId를 갖는 유저의 획득 뱃지 조회
     public GetUserBadgeRes getUserBadge(int userId) {
-        String getUserBadgeQuery = "select Badge.userId, User.nickname, BadgeCategory.badgeName, BadgeCategory.badgeImgUrl\n" +
-                "from Badge, User, BadgeCategory\n" +
-                "where User.userId = ? AND Badge.userId = ? AND Badge.badgeId = BadgeCategory.badgeId;"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
+        String getUserBadgeQuery = "select Badge.userId, User.nickname, BadgeCategory.badgeName, BadgeCategory.badgeImgUrl from Badge, User, BadgeCategory where User.userId =1 AND Badge.userId=1 AND Badge.badgeId = BadgeCategory.badgeId"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
         int getUserBadgeParams = userId;
         return this.jdbcTemplate.queryForObject(getUserBadgeQuery,
                 (rs, rowNum) -> new GetUserBadgeRes(
