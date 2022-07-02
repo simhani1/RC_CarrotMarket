@@ -91,20 +91,20 @@ public class UserDao {
         return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
-//    // 로그인: 해당 email에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
-//    public User getPwd(PostLoginReq postLoginReq) {
-//        String getPwdQuery = "select userId, password,email,nickname from User where email = ?"; // 해당 email을 만족하는 User의 정보들을 조회한다.
-//        String getPwdParams = postLoginReq.getPhoneNumber(); // 주입될 email값을 클라이언트의 요청에서 주어진 정보를 통해 가져온다.
-//
-//        return this.jdbcTemplate.queryForObject(getPwdQuery,
-//                (rs, rowNum) -> new User(
-//                        rs.getInt("userId"),
-//                        rs.getString("password"),
-//                        rs.getString("nickname")
-//                ), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-//                getPwdParams
-//        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
-//    }
+    // 로그인: 해당 휴대폰 번호에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
+    public User getPwd(PostLoginReq postLoginReq) {
+        String getPwdQuery = "select userId, pwd, telephoneNumber, nickname from User where telephoneNumber = ?";
+        String getPwdParams = postLoginReq.getTelephoneNumber();
+        return this.jdbcTemplate.queryForObject(getPwdQuery,
+                (rs, rowNum) -> new User(
+                        rs.getInt("userId"),
+                        rs.getString("nickname"),
+                        rs.getString("phoneNumber"),
+                        rs.getString("password")
+                ), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+                getPwdParams
+        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+    }
 
     // User 테이블에 존재하는 전체 유저들의 정보 조회
     public List<GetUserRes> getUsers() {
@@ -156,16 +156,16 @@ public class UserDao {
                 getUserParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-    // 해당 userId를 갖는 유저의 획득 뱃지 조회
-    public GetUserBadgeRes getUserBadge(int userId) {
-        String getUserBadgeQuery = "select badgeId from Badge where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
-        int getUserBadgeParams = userId;
-        return this.jdbcTemplate.queryForObject(getUserBadgeQuery,
-                (rs, rowNum) -> new GetUserBadgeRes(
-                        rs.getInt("userId")),
-                        //rs.getString("nickname"),
-                        //rs.getString("badgeName"),
-                        //rs.getString("badgeImgUrl")),
-                getUserBadgeParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
-    }
+//    // 해당 userId를 갖는 유저의 획득 뱃지 조회
+//    public List<GetUserBadgesRes> getUserBadges(int userId) {
+//        String getUserBadgesQuery = "select Badge.userId, User.nickname, BadgeCategory.badgeName, BadgeCategory.badgeImgUrl from Badge, User, BadgeCategory where User.userId = ? AND Badge.userId = ? AND Badge.badgeId = BadgeCategory.badgeId"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
+//        Object[] getUserBadgesParams = new Object[]{userId, userId};
+//        return this.jdbcTemplate.query(getUserBadgesQuery,
+//                (rs, rowNum) -> new GetUserBadgesRes(
+//                        rs.getInt("userId"),
+//                        rs.getString("nickname"),
+//                        rs.getString("badgeName"),
+//                        rs.getString("badgeImgUrl")),
+//                getUserBadgesParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+//    }
 }

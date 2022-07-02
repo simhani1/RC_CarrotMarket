@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
-import static com.example.demo.config.BaseResponseStatus.*;
-import static com.example.demo.utils.ValidationRegex.isRegexEmail;
-
 @RestController // Rest API 또는 WebAPI를 개발하기 위한 어노테이션. @Controller + @ResponseBody 를 합친것.
 // @Controller      [Presentation Layer에서 Contoller를 명시하기 위해 사용]
 //  [Presentation Layer?] 클라이언트와 최초로 만나는 곳으로 데이터 입출력이 발생하는 곳
@@ -78,24 +74,25 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-//    /**
-//     * 로그인 API
-//     * [POST] /users/logIn
-//     */
-//    @ResponseBody
-//    @PostMapping("/log-in")
-//    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
-//        try {
-//            // TODO: 로그인 값들에 대한 형식적인 validatin 처리해주셔야합니다!
-//            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
-//            PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
-//            return new BaseResponse<>(postLoginRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>(exception.getStatus());
-//        }
-//    }
-//
-//
+
+    /**
+     * 로그인 API
+     * [POST] /users/logIn
+     */
+    @ResponseBody
+    @PostMapping("/log-in")
+    public BaseResponse<PostLoginRes> logIn(@RequestBody PostLoginReq postLoginReq) {
+        try {
+            // TODO: 로그인 값들에 대한 형식적인 validation 처리해주셔야합니다!
+            // TODO: 유저의 status ex) 비활성화된 유저, 탈퇴한 유저 등을 관리해주고 있다면 해당 부분에 대한 validation 처리도 해주셔야합니다.
+            PostLoginRes postLoginRes = userProvider.logIn(postLoginReq);
+            return new BaseResponse<>(postLoginRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>(exception.getStatus());
+        }
+    }
+
+
     /**
      * 모든 회원들의  조회 API
      * [GET] /users
@@ -146,22 +143,21 @@ public class UserController {
 
     }
 
-    /**
-     * 획득한 뱃지 조회 API
-     * [GET] /users/badges/:userId
-     */
-    // Path-variable
-    @ResponseBody
-    @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
-    public BaseResponse<GetUserBadgeRes> getUserBadge(@PathVariable("userId") int userId) {
-        try {
-            GetUserBadgeRes getUserBadgeRes = userProvider.getUserBadge(userId);
-            return new BaseResponse<>(getUserBadgeRes);
-        } catch (BaseException exception) {
-            return new BaseResponse<>((exception.getStatus()));
-        }
-
-    }
+//    /**
+//     * 획득한 뱃지 조회 API
+//     * [GET] /users/badges/:userId
+//     */
+//    // Path-variable
+//    @ResponseBody
+//    @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
+//    public BaseResponse<GetUserBadgesRes> getUserBadges(@PathVariable("userId") int userId) {
+//        try {
+//            List<GetUserBadgesRes> getUserBadgesRes = userProvider.getUserBadges(userId);
+//            return new BaseResponse<>(getUserBadgesRes);
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
 
     /**
      * 유저 닉네임 변경 API

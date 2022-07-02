@@ -11,9 +11,16 @@ import lombok.*;
  * User 클래스는 스프링에서 사용하는 Objec이다.(내부에서 사용하기 위한 객체라고 보면 된다.)
  */
 public class User {
+    public User(int userId, String nickname, String telephoneNumber, String password) {
+        this.userId = userId;
+        this.nickname = nickname;
+        this.telephoneNumber = telephoneNumber;
+        this.password = password;
+    }
+
     private int userId;
     private String nickname;
-    private String phoneNumber;
+    private String telephoneNumber;
     private String password;
     private String status;
     private String profileImg;

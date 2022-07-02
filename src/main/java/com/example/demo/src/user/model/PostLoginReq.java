@@ -12,6 +12,6 @@ import lombok.*;
  * PhoneNumber, Password 정보를 전달하기 위해 Body값까지 전달하는 Post 요청을 사용한다.
  */
 public class PostLoginReq {
-    private String phoneNumber;
+    private String telephoneNumber;
     private String password;
 }
