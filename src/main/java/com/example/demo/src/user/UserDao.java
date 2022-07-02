@@ -157,15 +157,14 @@ public class UserDao {
     }
 
 //    // 해당 userId를 갖는 유저의 획득 뱃지 조회
-//    public List<GetUserBadgesRes> getUserBadges(int userId) {
+//    public List<GetUserBadgeRes> getUserBadges(int userId) {
 //        String getUserBadgesQuery = "select Badge.userId, User.nickname, BadgeCategory.badgeName, BadgeCategory.badgeImgUrl from Badge, User, BadgeCategory where User.userId = ? AND Badge.userId = ? AND Badge.badgeId = BadgeCategory.badgeId"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
 //        Object[] getUserBadgesParams = new Object[]{userId, userId};
 //        return this.jdbcTemplate.query(getUserBadgesQuery,
-//                (rs, rowNum) -> new GetUserBadgesRes(
+//                (rs, rowNum) -> new GetUserBadgeRes(
 //                        rs.getInt("userId"),
 //                        rs.getString("nickname"),
 //                        rs.getString("badgeName"),
-//                        rs.getString("badgeImgUrl")),
-//                getUserBadgesParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+//                        rs.getString("badgeImgUrl")));
 //    }
 }

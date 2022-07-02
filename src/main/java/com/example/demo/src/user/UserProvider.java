@@ -105,10 +105,10 @@ public class UserProvider {
     }
 
 //    // 해당 userId를 갖는 User의 획득 뱃지 조회
-//    public List<GetUserBadgesRes> getUserBadges(int userId) throws BaseException {
+//    public List<GetUserBadgeRes> getUserBadges(int userId) throws BaseException {
 //        try {
-//            List<GetUserBadgesRes> getUserBadgesRes = userDao.getUserBadges(userId);
-//            return getUserBadgesRes;
+//            List<GetUserBadgeRes> getUserBadgeRes = userDao.getUserBadges(userId);
+//            return getUserBadgeRes;
 //        } catch (Exception exception) {
 //            throw new BaseException(DATABASE_ERROR);
 //        }

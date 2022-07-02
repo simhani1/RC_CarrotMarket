@@ -150,10 +150,10 @@ public class UserController {
 //    // Path-variable
 //    @ResponseBody
 //    @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
-//    public BaseResponse<GetUserBadgesRes> getUserBadges(@PathVariable("userId") int userId) {
+//    public BaseResponse<GetUserBadgeRes> getUserBadges(@PathVariable("userId") int userId) {
 //        try {
-//            List<GetUserBadgesRes> getUserBadgesRes = userProvider.getUserBadges(userId);
-//            return new BaseResponse<>(getUserBadgesRes);
+//            List<GetUserBadgeRes> getUserBadgeRes = userProvider.getUserBadges(userId);
+//            return new BaseResponse<>(getUserBadgeRes);
 //        } catch (BaseException exception) {
 //            return new BaseResponse<>((exception.getStatus()));
 //        }
