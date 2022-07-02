@@ -124,6 +124,7 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
     /**
      * 회원 1명 조회 API
      * [GET] /users/:userId
@@ -139,6 +140,23 @@ public class UserController {
         try {
             GetUserRes getUserRes = userProvider.getUser(userId);
             return new BaseResponse<>(getUserRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+
+    }
+
+    /**
+     * 획득한 뱃지 조회 API
+     * [GET] /users/badges/:userId
+     */
+    // Path-variable
+    @ResponseBody
+    @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
+    public BaseResponse<GetUserBadgeRes> getUserBadge(@PathVariable("userId") int userId) {
+        try {
+            GetUserBadgeRes getUserBadgeRes = userProvider.getUserBadge(userId);
+            return new BaseResponse<>(getUserBadgeRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -201,4 +219,6 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+
 }

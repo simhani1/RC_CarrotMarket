@@ -17,13 +17,8 @@ import lombok.Setter;
  * GetUserRes는 클라이언트한테 response줄 때 DTO고
  * User 클래스는 스프링에서 사용하는 Objec이다.
  */
-public class GetUserRes {
+public class GetUserBadgeRes {
     private int userId;
     private String nickname;
-    private String telephoneNum;
-    private String pwd;
-    private String status;
-    private Double mannerTemp;
-    private int hopeRate;
-    private int responseRate;
+    private String badgeName;
 }
