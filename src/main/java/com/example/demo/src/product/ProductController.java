@@ -92,21 +92,16 @@ public class ProductController {
 //    //////////////////////////////////////  GET
 //
     /**
-     * 모든 판매글 조회 API
+     * 전체 판매 글 목록 조회(홈화면) API
      * [GET] /product
      *
-     * 해당 사용자의 판매글 조회 API
-     * [GET] /product?userId=
+     * 특정 유저의 판매 글 검색 API
+     * [GET] /product?nickname=
      */
     //Query String
-    @ResponseBody   // return되는 자바 객체를 JSON으로 바꿔서 HTTP body에 담는 어노테이션.
-    //  JSON은 HTTP 통신 시, 데이터를 주고받을 때 많이 쓰이는 데이터 포맷.
+    @ResponseBody
     @GetMapping("") // (GET) http://simhani1.shop:9000/app/product
-    // GET 방식의 요청을 매핑하기 위한 어노테이션
     public BaseResponse<List<GetArticleRes>> getArticles(@RequestParam(required = false) String nickname) {
-        //  @RequestParam은, 1개의 HTTP Request 파라미터를 받을 수 있는 어노테이션(?뒤의 값). default로 RequestParam은 반드시 값이 존재해야 하도록 설정되어 있지만, (전송 안되면 400 Error 유발)
-        //  지금 예시와 같이 required 설정으로 필수 값에서 제외 시킬 수 있음
-        //  defaultValue를 통해, 기본값(파라미터가 없는 경우, 해당 파라미터의 기본값 설정)을 지정할 수 있음
         try {
             if (nickname == null) {
                 List<GetArticleRes> GetArticlesRes = productProvider.getArticles();
@@ -119,6 +114,29 @@ public class ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+//    /**
+//     * 모든 판매글 조회 API
+//     * [GET] /product
+//     *
+//     * 해당 사용자의 판매글 조회 API
+//     * [GET] /product?userId=
+//     */
+//    //Query String
+//    @ResponseBody   // return되는 자바 객체를 JSON으로 바꿔서 HTTP body에 담는 어노테이션.
+//    //  JSON은 HTTP 통신 시, 데이터를 주고받을 때 많이 쓰이는 데이터 포맷.
+//    @GetMapping("") // (GET) http://simhani1.shop:9000/app/product
+//    // GET 방식의 요청을 매핑하기 위한 어노테이션
+//    public BaseResponse<List<GetArticleRes>> getArticlesInfo() {
+//        //  @RequestParam은, 1개의 HTTP Request 파라미터를 받을 수 있는 어노테이션(?뒤의 값). default로 RequestParam은 반드시 값이 존재해야 하도록 설정되어 있지만, (전송 안되면 400 Error 유발)
+//        //  지금 예시와 같이 required 설정으로 필수 값에서 제외 시킬 수 있음
+//        //  defaultValue를 통해, 기본값(파라미터가 없는 경우, 해당 파라미터의 기본값 설정)을 지정할 수 있음
+//        try {
+//            List<GetArticleRes> GetArticlesRes = productProvider.getArticlesInfo();
+//            return new BaseResponse<>(GetArticlesRes);
+//        } catch (BaseException exception) {
+//            return new BaseResponse<>((exception.getStatus()));
+//        }
+//    }
 //
 //    /**
 //     * 회원 1명 조회 API

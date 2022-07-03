@@ -117,7 +117,7 @@ public class UserDao {
 
     //////////////////////////////////////  GET
 
-    // User 테이블에 존재하는 전체 유저들의 정보 조회
+    // 원전체 회원정보 조회
     public List<GetUserRes> getUsers() {
         String getUsersQuery = "select * from User"; //User 테이블에 존재하는 모든 회원들의 정보를 조회하는 쿼리
         return this.jdbcTemplate.query(getUsersQuery,
@@ -125,7 +125,8 @@ public class UserDao {
                         rs.getInt("userId"),
                         rs.getString("nickname"),
                         rs.getString("telephoneNum"),
-                        rs.getString("pwd"), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+                        rs.getString("address"),
+                        rs.getString("pwd"),
                         rs.getString("status"),
                         rs.getString("updatedAt"))
         ); // 복수개의 회원정보들을 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보)의 결과 반환(동적쿼리가 아니므로 Parmas부분이 없음)
@@ -140,7 +141,8 @@ public class UserDao {
                         rs.getInt("userId"),
                         rs.getString("nickname"),
                         rs.getString("telephoneNum"),
-                        rs.getString("pwd"), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+                        rs.getString("address"),
+                        rs.getString("pwd"),
                         rs.getString("status"),
                         rs.getString("updatedAt")),
                 getUsersByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
@@ -155,7 +157,8 @@ public class UserDao {
                         rs.getInt("userId"),
                         rs.getString("nickname"),
                         rs.getString("telephoneNum"),
-                        rs.getString("pwd"), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+                        rs.getString("address"),
+                        rs.getString("pwd"),
                         rs.getString("status"),
                         rs.getString("updatedAt")),
                 getUserParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
@@ -169,6 +172,7 @@ public class UserDao {
                 (rs, rowNum) -> new GetUserRes(
                         rs.getString("profileImgUrl"),
                         rs.getString("nickname"),
+                        rs.getString("address"),
                         rs.getDouble("mannerTemp"),
                         rs.getInt("hopeRate"),
                         rs.getInt("responseRate")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기

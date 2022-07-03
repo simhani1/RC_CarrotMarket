@@ -80,7 +80,7 @@ public class ProductProvider {
 //
 //    //////////////////////////////////////  GET
 //
-    // 모든 판매글 조회
+    // 전체 판매 글 목록 조회(홈화면)
     public List<GetArticleRes> getArticles() throws BaseException {
         try {
             List<GetArticleRes> getArticlesRes = productDao.getArticles();
@@ -90,7 +90,7 @@ public class ProductProvider {
         }
     }
 
-    // 해당 nickname을 갖는 User들의 정보 조회
+    // 특정 유저의 판매 글 검색
     public List<GetArticleRes> getArticlesByNickname(String nickname) throws BaseException {
         try {
             List<GetArticleRes> getArticlesByNicknameRes = productDao.getArticlesByNickname(nickname);
@@ -99,7 +99,16 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-
+//
+//    // 모든 판매글 정보 조회
+//    public List<GetArticleRes> getArticlesInfo() throws BaseException {
+//        try {
+//            List<GetArticleRes> getArticlesRes = productDao.getArticlesInfo();
+//            return getArticlesRes;
+//        } catch (Exception exception) {
+//            throw new BaseException(DATABASE_ERROR);
+//        }
+//    }
 //
 //    // 해당 userId를 갖는 User의 정보 조회
 //    public GetUserRes getUser(int userId) throws BaseException {

@@ -22,19 +22,21 @@ import lombok.Setter;
 public class GetUserRes {
 
     // 해당 userId / nickname을 갖는 유저 정보 조회
-    public GetUserRes(int userId, String nickname, String telephoneNum, String pwd, String status, String updatedAt) {
+    public GetUserRes(int userId, String nickname, String telephoneNum, String address, String pwd, String status, String updatedAt) {
         this.userId = userId;
         this.nickname = nickname;
         this.telephoneNum = telephoneNum;
+        this.address = address;
         this.pwd = pwd;
         this.status = status;
         this.updatedAt = updatedAt;
     }
 
     // 해당 userId를 갖는 유저 프로필 조회
-    public GetUserRes(String profileImgUrl, String nickname, Double mannerTemp, int hopeRate, int responseRate) {
+    public GetUserRes(String profileImgUrl, String nickname, String address, Double mannerTemp, int hopeRate, int responseRate) {
         this.profileImgUrl = profileImgUrl;
         this.nickname = nickname;
+        this.address = address;
         this.mannerTemp = mannerTemp;
         this.hopeRate = hopeRate;
         this.responseRate = responseRate;
@@ -50,4 +52,5 @@ public class GetUserRes {
     private int hopeRate;
     private int responseRate;
     private String updatedAt;
+    private String address;
 }

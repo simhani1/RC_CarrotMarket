@@ -90,49 +90,75 @@ public class ProductDao {
 //
 //    //////////////////////////////////////  GET
 //
-    // User 테이블에 존재하는 전체 유저들의 정보 조회
+    // 전체 판매 글 목록 조회(홈화면)
     public List<GetArticleRes> getArticles() {
-        String getArticlesQuery = "select ProductImg.ProductImgUrl as 'productImgUrl', Product.title as 'title', format(Product.price, 0) as 'price', case when timestampdiff(second , Product.updatedAt, current_timestamp) <60 then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전') when timestampdiff(minute , Product.updatedAt, current_timestamp) <60 then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전') when timestampdiff(hour , Product.updatedAt, current_timestamp) <24 then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전') else concat(datediff(current_timestamp, Product.updatedAt),' 일 전') end as 'updatedAt', (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt', (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt' from Product inner join ProductImg on Product.productId = ProductImg.productId where ProductImg.mainImg = true";
+        String getArticlesQuery = "select\n" +
+                "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
+                "    Product.title as 'title',\n" +
+                "    User.address as 'address',\n" +
+                "    case when timestampdiff(second , Product.updatedAt, current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , Product.updatedAt, current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , Product.updatedAt, current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, Product.updatedAt),' 일 전')\n" +
+                "           end as 'updatedAt',\n" +
+                "    (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt',\n" +
+                "    (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt',\n" +
+                "    format(Product.price, 0) as 'price'\n" +
+                "from Product\n" +
+                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
+                "    inner join User on Product.userId = User.userId\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and ProductImg.mainImg = true\n" +
+                "order by Product.updatedAt desc";
         return this.jdbcTemplate.query(getArticlesQuery,
                 (rs, rowNum) -> new GetArticleRes (
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
-                        rs.getInt("price"),
+                        rs.getString("address"),
                         rs.getString("updatedAt"),
                         rs.getInt("chatRoomCnt"),
-                        rs.getInt("heartCnt"))
-        ); // 복수개의 회원정보들을 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보)의 결과 반환(동적쿼리가 아니므로 Parmas부분이 없음)
+                        rs.getInt("heartCnt"),
+                        rs.getString("price"))
+        );
     }
 
-    // 해당 nickname을 갖는 유저들의 정보 조회
+    // 특정 유저의 판매 글 검색
     public List<GetArticleRes> getArticlesByNickname(String nickname) {
-        String getArticlesByNicknameQuery = "";
+        String getArticlesByNicknameQuery = "select\n" +
+                "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
+                "    Product.title as 'title',\n" +
+                "    User.address as 'address',\n" +
+                "    case when timestampdiff(second , Product.updatedAt, current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , Product.updatedAt, current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , Product.updatedAt, current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, Product.updatedAt),' 일 전')\n" +
+                "           end as 'updatedAt',\n" +
+                "    (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt',\n" +
+                "    (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt',\n" +
+                "    format(Product.price, 0) as 'price'\n" +
+                "from Product\n" +
+                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
+                "    inner join User on Product.userId = User.userId\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and User.nickname = ? and ProductImg.mainImg = true\n" +
+                "order by Product.updatedAt desc";
         String getArticlesByNicknameParams = nickname;
         return this.jdbcTemplate.query(getArticlesByNicknameQuery,
                 (rs, rowNum) -> new GetArticleRes(
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
-                        rs.getInt("price"),
+                        rs.getString("address"),
                         rs.getString("updatedAt"),
                         rs.getInt("chatRoomCnt"),
-                        rs.getInt("heartCnt")),
+                        rs.getInt("heartCnt"),
+                        rs.getString("price")),
                 getArticlesByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-//    // 해당 userId를 갖는 유저조회
-//    public GetUserRes getUser(int userId) {
-//        String getUserQuery = "select * from User where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
-//        int getUserParams = userId;
-//        return this.jdbcTemplate.queryForObject(getUserQuery,
-//                (rs, rowNum) -> new GetUserRes(
-//                        rs.getInt("userId"),
-//                        rs.getString("nickname"),
-//                        rs.getString("telephoneNum"),
-//                        rs.getString("pwd"), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-//                        rs.getString("status"),
-//                        rs.getString("updatedAt")),
-//                getUserParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
-//    }
 //
 //    // 해당 userId를 갖는 유저 프로필 조회
 //    public GetUserRes getUserProfile(int userId) {

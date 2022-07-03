@@ -13,6 +13,7 @@ import lombok.*;
  */
 public class User {
 
+    // 전체 회원정보 조회
     public User(int userId, String nickname, String telephoneNum, String pwd) {
         this.userId = userId;
         this.nickname = nickname;
@@ -23,6 +24,7 @@ public class User {
     private int userId;
     private String nickname;
     private String telephoneNum;
+    private String address;
     private String pwd;
     private String status;
     private String profileImg;
