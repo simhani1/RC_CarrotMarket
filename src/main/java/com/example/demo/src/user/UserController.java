@@ -118,8 +118,8 @@ public class UserController {
         //  defaultValue를 통해, 기본값(파라미터가 없는 경우, 해당 파라미터의 기본값 설정)을 지정할 수 있음
         try {
             if (nickname == null) { // query string인 nickname이 없을 경우, 그냥 전체 유저정보를 불러온다.
-                List<GetUserRes> getUsersRes = userProvider.getUsers();
-                return new BaseResponse<>(getUsersRes);
+                List<GetUserRes> GetUsersRes = userProvider.getUsers();
+                return new BaseResponse<>(GetUsersRes);
             }
             // query string인 nickname이 있을 경우, 조건을 만족하는 유저정보들을 불러온다.
             List<GetUserRes> GetUserRes = userProvider.getUsersByNickname(nickname);
@@ -170,21 +170,21 @@ public class UserController {
     }
 
 
-//    /**
-//     * 획득한 뱃지 조회 API
-//     * [GET] /users/badges/:userId
-//     */
-//    // Path-variable
-//    @ResponseBody
-//    @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
-//    public BaseResponse<GetUserBadgeRes> getUserBadges(@PathVariable("userId") int userId) {
-//        try {
-//            List<GetUserBadgeRes> getUserBadgeRes = userProvider.getUserBadges(userId);
-//            return new BaseResponse<>(getUserBadgeRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    /**
+     * 획득한 뱃지 조회 API
+     * [GET] /users/badges/:userId
+     */
+    // Path-variable
+    @ResponseBody
+    @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
+    public BaseResponse<List<GetUserBadgeRes>> getUserBadges(@PathVariable("userId") int userId) {
+        try {
+            List<GetUserBadgeRes> getUserBadgeRes = userProvider.getUserBadges(userId);
+            return new BaseResponse<>(getUserBadgeRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 
     //////////////////////////////////////  PATCH
 

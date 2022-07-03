@@ -18,8 +18,6 @@ import lombok.Setter;
  * User 클래스는 스프링에서 사용하는 Objec이다.
  */
 public class GetUserBadgeRes {
-    private int userId;
-    private String nickname;
     private String badgeName;
     private String badgeImgUrl;
 }

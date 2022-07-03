@@ -1,6 +1,5 @@
 package com.example.demo.src.user;
 
-
 import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -176,16 +175,14 @@ public class UserDao {
                 getUserProfileParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-//    // 해당 userId를 갖는 유저의 획득 뱃지 조회
-//    public List<GetUserBadgeRes> getUserBadges(int userId) {
-//        String getUserBadgesQuery = "select Badge.badgeId, BadgeCategory.badgeName, BadgeCategory.badgeImgUrl from Badge inner join BadgeCategory on Badge.badgeId = BadgeCategory.badgeId where Badge.userId = ?";
-//        int getUserProfileParams = userId;
-//        return this.jdbcTemplate.query(getUserBadgesQuery,
-//                (rs, rowNum) -> new GetUserBadgeRes(
-//                        rs.getInt("userId"),
-//                        rs.getString("nickname"),
-//                        rs.getString("badgeName"),
-//                        rs.getString("badgeImgUrl")),
-//                getUserProfileParams);
-//    }
+    // 해당 userId를 갖는 유저의 획득 뱃지 조회
+    public List<GetUserBadgeRes> getUserBadges(int userId) {
+        String getUserBadgesQuery = "select BadgeCategory.badgeName as 'badgeName', BadgeCategory.badgeImgUrl as 'badgeImgUrl' from Badge inner join BadgeCategory on Badge.badgeId = BadgeCategory.badgeId where Badge.userId = ?";
+        int getUserProfileParams = userId;
+        return this.jdbcTemplate.query(getUserBadgesQuery,
+                (rs, rowNum) -> new GetUserBadgeRes(
+                        rs.getString("badgeName"),
+                        rs.getString("badgeImgUrl")),
+                getUserProfileParams);
+    }
 }
