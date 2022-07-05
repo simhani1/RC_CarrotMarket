@@ -61,8 +61,8 @@ public class UserDao {
 
     // 회원가입
     public int createUser(PostUserReq postUserReq) {
-        String createUserQuery = "insert into User (nickname, telephoneNum, pwd) VALUES (?,?,?)"; // 실행될 동적 쿼리문, 본인의 테이블 명에 맞게 수정을 하면 됩니다.
-        Object[] createUserParams = new Object[]{postUserReq.getNickname(), postUserReq.getPhoneNumber(), postUserReq.getPassword()}; // 동적 쿼리의 ?부분에 주입될 값
+        String createUserQuery = "insert into User (nickname, telephoneNum, address, pwd) VALUES (?,?,?, ?)"; // 실행될 동적 쿼리문, 본인의 테이블 명에 맞게 수정을 하면 됩니다.
+        Object[] createUserParams = new Object[]{postUserReq.getNickname(), postUserReq.getTelephoneNum(), postUserReq.getAddress(), postUserReq.getPwd()}; // 동적 쿼리의 ?부분에 주입될 값
         this.jdbcTemplate.update(createUserQuery, createUserParams);
         // phoneNumber -> postUserReq.getPhoneNumber(), pwd -> postUserReq.getPassword(), nickname -> postUserReq.getNickname() 로 매핑(대응)시킨다음 쿼리문을 실행한다.
         // 즉 DB의 User Table에 (phoneNumber, pwd, nickname)값을 가지는 유저 데이터를 삽입(생성)한다.
