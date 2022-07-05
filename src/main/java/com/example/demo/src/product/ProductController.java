@@ -114,6 +114,23 @@ public class ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 판매 글 조회(판매 글 메인화면) API
+     * [GET] /users/:userId
+     */
+    // Path-variable
+    @ResponseBody
+    @GetMapping("/detail/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/:productId
+    public BaseResponse<GetArticleRes> getArticleByProductId(@PathVariable("productId") int productId) {
+        try {
+            GetArticleRes getArticleByProductIdRes = productProvider.getArticleByProductId(productId);
+            return new BaseResponse<>(getArticleByProductIdRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 //    /**
 //     * 모든 판매글 조회 API
 //     * [GET] /product

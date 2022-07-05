@@ -159,6 +159,60 @@ public class ProductDao {
                 getArticlesByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    // 판매 글 조회(판매 글 메인화면)
+    public GetArticleRes getArticleByProductId(int productId) {
+        String getArticleByProductIdQuery = "select\n" +
+                "    ProductImg.productImgurl as 'productImgUrl',\n" +
+                "    User.nickname as 'nickname',\n" +
+                "    User.profileImgUrl as 'profileImgUrl',\n" +
+                "    User.mannerTemp as 'mannerTemp',\n" +
+                "    Product.condition as 'condition',\n" +
+                "    Product.title as 'title',\n" +
+                "    User.address as 'address',\n" +
+                "    Category.categoryName as 'categoryName',\n" +
+                "    case when timestampdiff(second , Product.updatedAt, current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , Product.updatedAt, current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , Product.updatedAt, current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, Product.updatedAt),' 일 전')\n" +
+                "           end as 'updatedAt',\n" +
+                "    Product.contents as 'contents',\n" +
+                "    (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt',\n" +
+                "    (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt',\n" +
+                "    format(Product.price, 0) as 'price',\n" +
+                "    Product.negotiation as 'negotiation'\n" +
+                "from Product\n" +
+                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
+                "    inner join Category on Product.categoryId = Category.categoryId\n" +
+                "    inner join User on Product.userId = User.userId\n" +
+                "where\n" +
+                "    Product.productId = ? and\n" +
+                "    ProductImg.mainImg = true and\n" +
+                "    Product.`\bstatus` = 'N' and\n" +
+                "    Product.isHided = 'N' and\n" +
+                "    User.status = 'A'";
+        int getArticleByProductIdParams = productId;
+        return this.jdbcTemplate.queryForObject(getArticleByProductIdQuery,
+                (rs, rowNum) -> new GetArticleRes(
+                        rs.getString("productImgUrl"),
+                        rs.getString("nickname"),
+                        rs.getString("profileImgUrl"),
+                        rs.getDouble("mannerTemp"),
+                        rs.getInt("condition"),
+                        rs.getString("title"),
+                        rs.getString("address"),
+                        rs.getString("categoryName"),
+                        rs.getString("updatedAt"),
+                        rs.getString("contents"),
+                        rs.getInt("chatRoomCnt"),
+                        rs.getInt("heartCnt"),
+                        rs.getString("price"),
+                        rs.getString("negotiation")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
+                getArticleByProductIdParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+    }
+
 //
 //    // 해당 userId를 갖는 유저 프로필 조회
 //    public GetUserRes getUserProfile(int userId) {

@@ -21,18 +21,37 @@ public class GetArticleRes {
         this.price = price;
     }
 
-    // 전체 글 조회
+    // 판매 글 조회(판매 글 메인화면)
+    public GetArticleRes(String productImgUrl, String nickname, String profileImgUrl, double mannerTemp, int condition, String title, String address, String categoryName, String updatedAt, String contents, int chatRoomCnt, int heartCnt, String price, String negotiation) {
+        this.productImgUrl = productImgUrl;
+        this.nickname = nickname;
+        this.profileImgUrl = profileImgUrl;
+        this.mannerTemp = mannerTemp;
+        this.condition = condition;
+        this.title = title;
+        this.address = address;
+        this.categoryName = categoryName;
+        this.updatedAt = updatedAt;
+        this.contents = contents;
+        this.chatRoomCnt = chatRoomCnt;
+        this.heartCnt = heartCnt;
+        this.price = price;
+        this.negotiation = negotiation;
+    }
+
     private String productImgUrl;
     private String nickname;
+    private String profileImgUrl;
     private double mannerTemp;
     private String title;
     private String address;
     private String categoryName;
-    private int Condition;
+    private int condition;
     private int updatedCnt;
     private String updatedAt;
-    private String content;
+    private String contents;
     private int chatRoomCnt;
     private int heartCnt;
     private String price;
+    private String negotiation;
 }

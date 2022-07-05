@@ -99,6 +99,16 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // 해당 productId를 갖는 판매 글의 메인화면 조회
+    public GetArticleRes getArticleByProductId(int productId) throws BaseException {
+        try {
+            GetArticleRes getArticleByProductIdRes = productDao.getArticleByProductId(productId);
+            return getArticleByProductIdRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    // 모든 판매글 정보 조회
 //    public List<GetArticleRes> getArticlesInfo() throws BaseException {
