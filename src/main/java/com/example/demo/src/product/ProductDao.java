@@ -1,13 +1,16 @@
 package com.example.demo.src.product;
 
+import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.GetArticleRes;
 import com.example.demo.src.product.model.PatchProductReq;
+import com.example.demo.src.product.model.PostProductReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.List;
+
 @Repository //  [Persistence Layer에서 DAO를 명시하기 위해 사용]
 
 /**
@@ -33,27 +36,37 @@ public class ProductDao {
 
     //////////////////////////////////////  POST
 
-//    // 회원가입
-//    public int createUser(PostUserReq postUserReq) {
-//        String createUserQuery = "insert into User (nickname, telephoneNum, pwd) VALUES (?,?,?)"; // 실행될 동적 쿼리문, 본인의 테이블 명에 맞게 수정을 하면 됩니다.
-//        Object[] createUserParams = new Object[]{postUserReq.getNickname(), postUserReq.getPhoneNumber(), postUserReq.getPassword()}; // 동적 쿼리의 ?부분에 주입될 값
-//        this.jdbcTemplate.update(createUserQuery, createUserParams);
-//        // phoneNumber -> postUserReq.getPhoneNumber(), pwd -> postUserReq.getPassword(), nickname -> postUserReq.getNickname() 로 매핑(대응)시킨다음 쿼리문을 실행한다.
-//        // 즉 DB의 User Table에 (phoneNumber, pwd, nickname)값을 가지는 유저 데이터를 삽입(생성)한다.
-//
-//        String lastInserIdQuery = "select last_insert_id()"; // 가장 마지막에 삽입된(생성된) id값을 가져온다.
-//        return this.jdbcTemplate.queryForObject(lastInserIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 유저의 userId번호를 반환한다.
+    // 판매 글 작성(Post)
+    public int createArticle(PostProductReq postProductReq) throws BaseException {
+        String createArticleQuery = "insert into Product (userId, title, categoryId, price, negotiation, contents) VALUES (?, ?, ?, ?, ?, ?)";
+        Object[] createArticleParams = new Object[]{postProductReq.getUserId(), postProductReq.getTitle(), postProductReq.getCategoryId(), postProductReq.getPrice(), postProductReq.getNegotiation(), postProductReq.getContents()};
+        // 내용이 정확하게 입력됐는지 검사
+        for(Object obj : createArticleParams) {
+            if (obj.getClass().getSimpleName().equals("String")) {
+                if (obj.equals(null)) {
+                    return -1;
+                }
+            }
+            else {
+                if ((int) obj < 0) {
+                    return -1;
+                }
+            }
+        }
+        this.jdbcTemplate.update(createArticleQuery, createArticleParams);
+        String lastInsertIdQuery = "select count(*) from Product"; // Product 테이블에서 가장 마지막에 삽입된(생성된) id값을 가져온다.
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 판매 글의 productId를 반환한다.
+    }
+
+//    // 휴대폰 번호 확인
+//    public int checkPhoneNumber(String phoneNumber) {
+//        String checkPhoneNumberQuery = "select exists(select phoneNum from User where phoneNum = ?)"; // User Table에 해당 email 값을 갖는 유저 정보가 존재하는가?
+//        String checkPhoneNumberParams = phoneNumber; // 해당(확인할) 이메일 값
+//        return this.jdbcTemplate.queryForObject(checkPhoneNumberQuery,
+//                int.class,
+//                checkPhoneNumberParams); // checkPhoneNumberQuery, checkPhoneNumberParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
 //    }
-//
-////    // 휴대폰 번호 확인
-////    public int checkPhoneNumber(String phoneNumber) {
-////        String checkPhoneNumberQuery = "select exists(select phoneNum from User where phoneNum = ?)"; // User Table에 해당 email 값을 갖는 유저 정보가 존재하는가?
-////        String checkPhoneNumberParams = phoneNumber; // 해당(확인할) 이메일 값
-////        return this.jdbcTemplate.queryForObject(checkPhoneNumberQuery,
-////                int.class,
-////                checkPhoneNumberParams); // checkPhoneNumberQuery, checkPhoneNumberParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
-////    }
-//
+
     //////////////////////////////////////  PATCH
 
     // 판매 글 삭제(Patch)

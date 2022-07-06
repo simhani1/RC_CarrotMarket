@@ -2,6 +2,8 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.src.product.model.PatchProductReq;
+import com.example.demo.src.product.model.PostProductReq;
+import com.example.demo.src.product.model.PostProductRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,25 +46,29 @@ public class ProductService {
 
     //////////////////////////////////////  POST
 
-//    // 판매 글 작성(POST)
-//    public PostProductRes createArticle(PostProductReq postArticleReq) throws BaseException {
-//        try {
-//            int userId = userDao.createUser(postUserReq);
-//            return new PostUserRes(userId);
-//
-////  *********** 해당 부분은 7주차 수업 후 주석해제하서 대체해서 사용해주세요! ***********
-////            //jwt 발급.
-////            String jwt = jwtService.createJwt(userId);
-////            return new PostUserRes(jwt,userId);
-////  *********************************************************************
-//        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+    // 판매 글 작성(POST)
+    public PostProductRes createArticle(PostProductReq postArticleReq, int userId) throws BaseException {
+        int productId = 0;
+        try {
+            productId = productDao.createArticle(postArticleReq);  // 작성한 판매 글의 productId를 반환받음
+            // 값이 정확하게 입력되지 않은 경우
+            if(productId == -1){
+                throw new Exception();
+            }
+            String jwt = jwtService.createJwt(userId);
+            return new PostProductRes(userId, jwt, productId);
+        }
+        catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            if(productId == -1) {
+                throw new BaseException(REQUEST_ERROR);
+            }
+            throw new BaseException(REMOVE_FAIL_PRODUCT);
+        }
+    }
 
     //////////////////////////////////////  PATCH
 
-    // 회원정보 수정(Patch)
+    // 판매 글 삭제(Patch)
     public void removeProduct(PatchProductReq removeProductReq) throws BaseException {
         try {
             int result = productDao.removeProduct(removeProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.

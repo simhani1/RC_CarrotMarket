@@ -4,6 +4,8 @@ import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.product.model.GetArticleRes;
 import com.example.demo.src.product.model.PatchProductReq;
+import com.example.demo.src.product.model.PostProductReq;
+import com.example.demo.src.product.model.PostProductRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @RestController // Rest API 또는 WebAPI를 개발하기 위한 어노테이션. @Controller + @ResponseBody 를 합친것.
 // @Controller      [Presentation Layer에서 Contoller를 명시하기 위해 사용]
@@ -39,7 +43,7 @@ public class ProductController {
     @Autowired
     private final ProductService productService;
     @Autowired
-    private final JwtService jwtService; // JWT부분은 7주차에 다루므로 모르셔도 됩니다!
+    private final JwtService jwtService;
 
 
     public ProductController(ProductProvider productProvider, ProductService productService, JwtService jwtService) {
@@ -56,22 +60,30 @@ public class ProductController {
 
     //////////////////////////////////////  POST
 
-//    /**
-//     * 판매 글 작성 API
-//     * [POST] /products
-//     */
-//    // Body
-//    @ResponseBody
-//    @PostMapping("/product/:userId")    // POST 방식의 요청을 매핑하기 위한 어노테이션
-//    public BaseResponse<PostProductRes> createArticle(@RequestBody PostProductReq postArticleReq) {
-//        //  @RequestBody란, 클라이언트가 전송하는 HTTP Request Body(우리는 JSON으로 통신하니, 이 경우 body는 JSON)를 자바 객체로 매핑시켜주는 어노테이션
-//        try {
-//            PostProductRes postArticleRes = productService.createArticle(postArticleReq);
-//            return new BaseResponse<>(postArticleRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    /**
+     * 판매 글 작성 API
+     * [POST] /product/:userId
+     */
+    // Body
+    @ResponseBody
+    @PostMapping("/{userId}")  // (POST) http://simhani1.shop:9000/app/product/:userId
+    public BaseResponse<PostProductRes> createArticle(@RequestBody PostProductReq postArticleReq, @PathVariable int userId) {
+        try {
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PostProductRes postArticleRes = productService.createArticle(postArticleReq, userId);
+            return new BaseResponse<>(postArticleRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 //
 //    /**
 //     * 로그인 API
