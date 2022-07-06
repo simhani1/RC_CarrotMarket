@@ -2,7 +2,8 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.product.model.*;
+import com.example.demo.src.product.model.GetArticleRes;
+import com.example.demo.src.product.model.PatchProductReq;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,35 +195,37 @@ public class ProductController {
 //            return new BaseResponse<>((exception.getStatus()));
 //        }
 //    }
-//
-//    /**
-//     * 유저 닉네임 변경 API
-//     * [PATCH] /users/:userId
-//     *
-//     */
-//    @ResponseBody
-//    @PatchMapping("/{userId}")
-//    public BaseResponse<String> modifyUserName(@PathVariable("userId") int userId, @RequestBody User user) {
-//        try {
-///*
-//  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-//            //jwt에서 idx 추출.
-//            int userIdByJwt = jwtService.getUserIdx();
-//            //userId와 접근한 유저가 같은지 확인
-//            if(userId != userIdByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //같다면 유저네임 변경
-//  **************************************************************************
-// */
-//            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
-//            userService.modifyUserName(patchUserReq);
-//            String result = "닉네임이 변경되었습니다.";
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+
+    //////////////////////////////////////  PATCH
+
+    /**
+     * 판매 글 삭제 API
+     * [PATCH] /status/:productId
+     *
+     */
+    @ResponseBody
+    @PatchMapping("/status/delete/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:productId
+    public BaseResponse<String> removeProduct(@PathVariable("productId") int productId) {
+        try {
+/*
+  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
+            //jwt에서 idx 추출.
+            int productIdByJwt = jwtService.getProductIdx();
+            //productId와 접근한 유저가 같은지 확인
+            if(productId != productIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+  **************************************************************************
+ */
+            PatchProductReq removeProductReq = new PatchProductReq(productId);
+            productService.removeProduct(removeProductReq);
+            String result = "글이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 //    /**
 //     * 회원탈퇴 API
 //     * [PATCH] /users/withdraw/:userId

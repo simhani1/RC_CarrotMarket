@@ -11,11 +11,20 @@ import lombok.*;
 // 끌어올리기
 
 public class PatchProductReq {
+    // 판매 글 삭제 API
+    public PatchProductReq(int productId) {
+        this.productId = productId;
+    }
+
     private int userId;
+    private int buyerId;
+    private String nickname;
+    private String buyerNickname;
     private int productId;
     private String title;
+    private String contents;
     private int categoryId;
     private int price;
     private String negotiation;
-    private String contents;
+    private String status;
 }

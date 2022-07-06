@@ -1,6 +1,7 @@
 package com.example.demo.src.product;
 
-import com.example.demo.src.product.model.*;
+import com.example.demo.src.product.model.GetArticleRes;
+import com.example.demo.src.product.model.PatchProductReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -53,15 +54,16 @@ public class ProductDao {
 ////                checkPhoneNumberParams); // checkPhoneNumberQuery, checkPhoneNumberParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
 ////    }
 //
-//    //////////////////////////////////////  PATCH
-//
-//    // 닉네임 변경
-//    public int modifyUserName(PatchUserReq patchUserReq) {
-//        String modifyUserNameQuery = "update User set nickname = ? where userId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
-//        Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserId()}; // 주입될 값들(nickname, userId) 순
-//
-//        return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
-//    }
+    //////////////////////////////////////  PATCH
+
+    // 닉네임 변경
+    public int removeProduct(PatchProductReq patchProductReq) {
+        String removeProductQuery = "UPDATE RC_CarrotMarket.Product\n" +
+                "SET `\bstatus` = 'Y'\n" +
+                "WHERE productId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
+        int removeProductParams = patchProductReq.getProductId(); // 주입될 값들(nickname, userId) 순
+        return this.jdbcTemplate.update(removeProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
 //
 //    // 회원탈퇴 처리
 //    public int modifyUserStatus(PatchUserReq patchUserReq) {

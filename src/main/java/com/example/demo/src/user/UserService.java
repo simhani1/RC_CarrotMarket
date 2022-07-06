@@ -77,7 +77,7 @@ public class UserService {
 
     //////////////////////////////////////  PATCH
 
-    // 회원정보 수정(Patch)
+    // 유저 닉네임 변경(Patch)
     public void modifyUserName(PatchUserReq patchUserReq) throws BaseException {
         try {
             int result = userDao.modifyUserName(patchUserReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
