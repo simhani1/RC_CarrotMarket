@@ -10,7 +10,7 @@ import lombok.Setter;
 
 public class GetArticleRes {
 
-    // 전체 판매 글 목록 조회(홈화면) & 특정 유저의 판매 글 검색
+    // 전체 판매 글 목록 조회(홈화면) & 특정 유저의 판매 글 검색 & 판매 글 검색(title)
     public GetArticleRes(String productImgUrl, String title, String address, String updatedAt, int chatRoomCnt, int heartCnt, String price) {
         this.productImgUrl = productImgUrl;
         this.title = title;

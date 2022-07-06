@@ -100,7 +100,7 @@ public class ProductDao {
 //    }
 //
 //    //////////////////////////////////////  GET
-//
+
     // 전체 판매 글 목록 조회(홈화면) (Get)
     public List<GetArticleRes> getArticles() {
         String getArticlesQuery = "select\n" +
@@ -224,6 +224,39 @@ public class ProductDao {
                 getArticleByProductIdParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    // 판매 글 검색(title) (Get)
+    public List<GetArticleRes> searchArticlesByTitle() {
+        String getArticlesQuery = "select\n" +
+                "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
+                "    Product.title as 'title',\n" +
+                "    User.address as 'address',\n" +
+                "    case when timestampdiff(second , Product.updatedAt, current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , Product.updatedAt, current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , Product.updatedAt, current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, Product.updatedAt),' 일 전')\n" +
+                "           end as 'updatedAt',\n" +
+                "    (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt',\n" +
+                "    (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt',\n" +
+                "    format(Product.price, 0) as 'price'\n" +
+                "from Product\n" +
+                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
+                "    inner join User on Product.userId = User.userId\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and Product.title like '%?%' and ProductImg.mainImg = true\n" +
+                "order by Product.updatedAt desc";
+        return this.jdbcTemplate.query(getArticlesQuery,
+                (rs, rowNum) -> new GetArticleRes (
+                        rs.getString("productImgUrl"),
+                        rs.getString("title"),
+                        rs.getString("address"),
+                        rs.getString("updatedAt"),
+                        rs.getInt("chatRoomCnt"),
+                        rs.getInt("heartCnt"),
+                        rs.getString("price"))
+        );
+    }
 //
 //    // 해당 userId를 갖는 유저 프로필 조회
 //    public GetUserRes getUserProfile(int userId) {

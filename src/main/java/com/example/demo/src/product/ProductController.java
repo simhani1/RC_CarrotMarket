@@ -99,7 +99,6 @@ public class ProductController {
      * 특정 유저의 판매 글 검색 API
      * [GET] /product?nickname=
      */
-    //Query String
     @ResponseBody
     @GetMapping("") // (GET) http://simhani1.shop:9000/app/product
     public BaseResponse<List<GetArticleRes>> getArticles(@RequestParam(required = false) String nickname) {
@@ -118,15 +117,30 @@ public class ProductController {
 
     /**
      * 판매 글 조회(판매 글 메인화면) API
-     * [GET] /users/:userId
+     * [GET] /product/detail/:productId
      */
-    // Path-variable
     @ResponseBody
     @GetMapping("/detail/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/:productId
     public BaseResponse<GetArticleRes> getArticleByProductId(@PathVariable("productId") int productId) {
         try {
             GetArticleRes getArticleByProductIdRes = productProvider.getArticleByProductId(productId);
             return new BaseResponse<>(getArticleByProductIdRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 판매 글 검색(title) API
+     * [GET] /product?title
+     */
+    //Query String
+    @ResponseBody
+    @GetMapping("?title") // (GET) http://simhani1.shop:9000/app/product?title=
+    public BaseResponse<List<GetArticleRes>> searchArticlesByTitle() {
+        try {
+            List<GetArticleRes> GetArticlesRes = productProvider.searchArticlesByTitle();
+            return new BaseResponse<>(GetArticlesRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

@@ -83,8 +83,8 @@ public class ProductProvider {
     // 전체 판매 글 목록 조회(홈화면)
     public List<GetArticleRes> getArticles() throws BaseException {
         try {
-            List<GetArticleRes> getArticlesRes = productDao.getArticles();
-            return getArticlesRes;
+            List<GetArticleRes> GetArticlesRes = productDao.getArticles();
+            return GetArticlesRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -93,8 +93,8 @@ public class ProductProvider {
     // 특정 유저의 판매 글 검색
     public List<GetArticleRes> getArticlesByNickname(String nickname) throws BaseException {
         try {
-            List<GetArticleRes> getArticlesByNicknameRes = productDao.getArticlesByNickname(nickname);
-            return getArticlesByNicknameRes;
+            List<GetArticleRes> GetArticlesByNicknameRes = productDao.getArticlesByNickname(nickname);
+            return GetArticlesByNicknameRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -103,22 +103,22 @@ public class ProductProvider {
     // 해당 productId를 갖는 판매 글의 메인화면 조회
     public GetArticleRes getArticleByProductId(int productId) throws BaseException {
         try {
-            GetArticleRes getArticleByProductIdRes = productDao.getArticleByProductId(productId);
-            return getArticleByProductIdRes;
+            GetArticleRes GetArticleByProductIdRes = productDao.getArticleByProductId(productId);
+            return GetArticleByProductIdRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-//
-//    // 모든 판매글 정보 조회
-//    public List<GetArticleRes> getArticlesInfo() throws BaseException {
-//        try {
-//            List<GetArticleRes> getArticlesRes = productDao.getArticlesInfo();
-//            return getArticlesRes;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+
+    // 판매 글 검색(title)
+    public List<GetArticleRes> searchArticlesByTitle() throws BaseException {
+        try {
+            List<GetArticleRes> GetArticlesRes = productDao.searchArticlesByTitle();
+            return GetArticlesRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    // 해당 userId를 갖는 User의 정보 조회
 //    public GetUserRes getUser(int userId) throws BaseException {
