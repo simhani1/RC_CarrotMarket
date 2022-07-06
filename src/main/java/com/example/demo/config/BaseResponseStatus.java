@@ -59,7 +59,8 @@ public enum BaseResponseStatus {
 
     // [PATCH] /product/status/delete/{productId}
 
-    REMOVE_FAIL_PRODUCT(false, 4100, "글 삭제에 실패하였습니다.");
+    REMOVE_FAIL_PRODUCT(false, 4100, "글 삭제에 실패하였습니다."),
+    UPDATE_FAIL_PRODUCT(false, 4101, "끌어올리기에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

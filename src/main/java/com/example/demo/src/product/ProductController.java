@@ -226,6 +226,35 @@ public class ProductController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
+
+    /**
+     * 끌어올리기 API
+     * [PATCH] /status/up/:productId
+     */
+    @ResponseBody
+    @PatchMapping("/status/up/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:productId
+    public BaseResponse<String> updateProduct(@PathVariable("productId") int productId) {
+        try {
+/*
+  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
+            //jwt에서 idx 추출.
+            int productIdByJwt = jwtService.getProductIdx();
+            //productId와 접근한 유저가 같은지 확인
+            if(productId != productIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //같다면 유저네임 변경
+  **************************************************************************
+ */
+            PatchProductReq updateProductReq = new PatchProductReq(productId);
+            productService.updateProduct(updateProductReq);
+            String result = "끌어올리기를 성공하였습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
 //    /**
 //     * 회원탈퇴 API
 //     * [PATCH] /users/withdraw/:userId

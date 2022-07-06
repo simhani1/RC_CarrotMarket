@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
-import static com.example.demo.config.BaseResponseStatus.REMOVE_FAIL_PRODUCT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 /**
  * Service란?
@@ -17,7 +16,8 @@ import static com.example.demo.config.BaseResponseStatus.REMOVE_FAIL_PRODUCT;
  * 요청한 작업을 처리하는 관정을 하나의 작업으로 묶음
  * dao를 호출하여 DB CRUD를 처리 후 Controller로 반환
  */
-@Service    // [Business Layer에서 Service를 명시하기 위해서 사용] 비즈니스 로직이나 respository layer 호출하는 함수에 사용된다.
+@Service
+// [Business Layer에서 Service를 명시하기 위해서 사용] 비즈니스 로직이나 respository layer 호출하는 함수에 사용된다.
 // [Business Layer]는 컨트롤러와 데이터 베이스를 연결
 
 public class ProductService {
@@ -66,8 +66,20 @@ public class ProductService {
     public void removeProduct(PatchProductReq removeProductReq) throws BaseException {
         try {
             int result = productDao.removeProduct(removeProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
-            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메세지를 보냅니다.
                 throw new BaseException(REMOVE_FAIL_PRODUCT);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 끌어올리기(Patch)
+    public void updateProduct(PatchProductReq updateProductReq) throws BaseException {
+        try {
+            int result = productDao.updateProduct(updateProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메세지를 보냅니다.
+                throw new BaseException(UPDATE_FAIL_PRODUCT);
             }
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
             throw new BaseException(DATABASE_ERROR);

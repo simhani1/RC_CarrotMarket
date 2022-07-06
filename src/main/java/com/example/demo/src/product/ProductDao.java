@@ -56,13 +56,22 @@ public class ProductDao {
 //
     //////////////////////////////////////  PATCH
 
-    // 닉네임 변경
+    // 판매 글 삭제(Patch)
     public int removeProduct(PatchProductReq patchProductReq) {
         String removeProductQuery = "UPDATE RC_CarrotMarket.Product\n" +
                 "SET `\bstatus` = 'Y'\n" +
                 "WHERE productId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
         int removeProductParams = patchProductReq.getProductId(); // 주입될 값들(nickname, userId) 순
         return this.jdbcTemplate.update(removeProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
+
+    // 끌어올리기(Patch)
+    public int updateProduct(PatchProductReq updateProductReq) {
+        String updateProductQuery = "update Product\n" +
+                "set updatedAt=current_time\n" +
+                "where Product.productId = ? ";
+        int removeProductParams = updateProductReq.getProductId();
+        return this.jdbcTemplate.update(updateProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 //
 //    // 회원탈퇴 처리
@@ -92,7 +101,7 @@ public class ProductDao {
 //
 //    //////////////////////////////////////  GET
 //
-    // 전체 판매 글 목록 조회(홈화면)
+    // 전체 판매 글 목록 조회(홈화면) (Get)
     public List<GetArticleRes> getArticles() {
         String getArticlesQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
@@ -126,7 +135,7 @@ public class ProductDao {
         );
     }
 
-    // 특정 유저의 판매 글 검색
+    // 특정 유저의 판매 글 검색 (Get)
     public List<GetArticleRes> getArticlesByNickname(String nickname) {
         String getArticlesByNicknameQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
@@ -161,7 +170,7 @@ public class ProductDao {
                 getArticlesByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-    // 판매 글 조회(판매 글 메인화면)
+    // 판매 글 조회(판매 글 메인화면) (Get)
     public GetArticleRes getArticleByProductId(int productId) {
         String getArticleByProductIdQuery = "select\n" +
                 "    ProductImg.productImgurl as 'productImgUrl',\n" +

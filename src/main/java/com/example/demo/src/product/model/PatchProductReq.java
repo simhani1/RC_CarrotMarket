@@ -12,6 +12,7 @@ import lombok.*;
 
 public class PatchProductReq {
     // 판매 글 삭제 API
+    // 끌어올리기 API
     public PatchProductReq(int productId) {
         this.productId = productId;
     }
