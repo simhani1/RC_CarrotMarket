@@ -63,13 +63,11 @@ public class UserService {
         }
         try {
             int userId = userDao.createUser(postUserReq);
-            return new PostUserRes(userId);
-
-//  *********** 해당 부분은 7주차 수업 후 주석해제하서 대체해서 사용해주세요! ***********
-//            //jwt 발급.
-//            String jwt = jwtService.createJwt(userId);
-//            return new PostUserRes(jwt,userId);
-//  *********************************************************************
+            //////////////////////////////////////  JWT
+            //jwt 발급.
+            String jwt = jwtService.createJwt(userId);
+            return new PostUserRes(userId, jwt);
+            //////////////////////////////////////  JWT
         } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
             throw new BaseException(DATABASE_ERROR);
         }

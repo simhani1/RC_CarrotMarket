@@ -53,15 +53,12 @@ public class UserProvider {
         } catch (Exception ignored) {
             throw new BaseException(PASSWORD_DECRYPTION_ERROR);
         }
-
         if (postLoginReq.getPwd().equals(pwd)) { //비말번호가 일치한다면 userId를 가져온다.
             int userId = userDao.getPwd(postLoginReq).getUserId();
-            return new PostLoginRes(userId);
-//  *********** 해당 부분은 7주차 - JWT 수업 후 주석해제 및 대체해주세요!  **************** //
-//            String jwt = jwtService.createJwt(userId);
-//            return new PostLoginRes(userId,jwt);
-//  **************************************************************************
-
+            //////////////////////////////////////  JWT
+            String jwt = jwtService.createJwt(userId);
+            return new PostLoginRes(userId,jwt);
+            //////////////////////////////////////  JWT
         } else { // 비밀번호가 다르다면 에러메세지를 출력한다.
             throw new BaseException(FAILED_TO_LOGIN);
         }

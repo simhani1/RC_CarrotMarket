@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_EMPTY_PHONENUMBER;
-import static com.example.demo.config.BaseResponseStatus.POST_USERS_INVALID_PHONENUMBER;
+import static com.example.demo.config.BaseResponseStatus.*;
 import static com.example.demo.utils.ValidationRegex.isRegexTelephoneNum;
 
 @RestController // Rest API 또는 WebAPI를 개발하기 위한 어노테이션. @Controller + @ResponseBody 를 합친것.
@@ -146,6 +145,14 @@ public class UserController {
         //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
         // Get Users
         try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
             GetUserRes getUserRes = userProvider.getUser(userId);
             return new BaseResponse<>(getUserRes);
         } catch (BaseException exception) {
@@ -166,6 +173,14 @@ public class UserController {
         //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
         // Get Users
         try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
             GetUserRes getUserRes = userProvider.getUserProfile(userId);
             return new BaseResponse<>(getUserRes);
         } catch (BaseException exception) {
@@ -183,6 +198,14 @@ public class UserController {
     @GetMapping("/badges/{userId}") // (GET) http://simhani1.shop:9000/app/users/badges/:userId
     public BaseResponse<List<GetUserBadgeRes>> getUserBadges(@PathVariable("userId") int userId) {
         try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
             List<GetUserBadgeRes> getUserBadgeRes = userProvider.getUserBadges(userId);
             return new BaseResponse<>(getUserBadgeRes);
         } catch (BaseException exception) {
@@ -201,17 +224,15 @@ public class UserController {
     @PatchMapping("/{userId}")
     public BaseResponse<String> modifyUserName(@PathVariable("userId") int userId, @RequestBody User user) {
         try {
-/*
-  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-            //jwt에서 idx 추출.
-            int userIdByJwt = jwtService.getUserIdx();
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
             //userId와 접근한 유저가 같은지 확인
             if(userId != userIdByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
+            //////////////////////////////////////  JWT
             //같다면 유저네임 변경
-  **************************************************************************
- */
             PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
             userService.modifyUserName(patchUserReq);
             String result = "닉네임이 변경되었습니다.";
@@ -229,17 +250,14 @@ public class UserController {
     @PatchMapping("/withdraw/{userId}")
     public BaseResponse<String> modifyUserStatus(@PathVariable("userId") int userId, @RequestBody User user) {
         try {
-/*
-  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-            //jwt에서 idx 추출.
-            int userIdByJwt = jwtService.getUserIdx();
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
             //userId와 접근한 유저가 같은지 확인
             if(userId != userIdByJwt){
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            //같다면 유저네임 변경
-  **************************************************************************
- */
+            //////////////////////////////////////  JWT
             PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname(), user.getStatus());
             userService.modifyUserStatus(patchUserReq);
             String result = "탈퇴처리 되었습니다.";

@@ -13,6 +13,5 @@ import lombok.Setter;
  */
 public class PostUserRes {
     private int userId;  // 인젝스 번호로 해당 유저의 모든 정보를 출력
-//    해당 부분은 7주차 - JWT 수업 후 주석해제 및 대체해주세요!
-//    private String jwt;
+    private String jwt;
 }
