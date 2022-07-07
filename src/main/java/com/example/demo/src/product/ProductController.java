@@ -55,9 +55,6 @@ public class ProductController {
     // ******************************************************************************
 
 
-
-
-
     //////////////////////////////////////  POST
 
     /**
@@ -74,7 +71,7 @@ public class ProductController {
             //jwt에서 idx 추출
             int userIdByJwt = jwtService.getUserId();
             //userId와 접근한 유저가 같은지 확인
-            if(userId != userIdByJwt){
+            if (userId != userIdByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //////////////////////////////////////  JWT
@@ -104,10 +101,11 @@ public class ProductController {
 //
 //    //////////////////////////////////////  GET
 //
+
     /**
      * 전체 판매 글 목록 조회(홈화면) API
      * [GET] /product
-     *
+     * <p>
      * 특정 유저의 판매 글 검색 API
      * [GET] /product?nickname=
      */
@@ -153,6 +151,32 @@ public class ProductController {
         try {
             List<GetArticleRes> GetArticlesRes = productProvider.searchArticlesByTitle();
             return new BaseResponse<>(GetArticlesRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    // /app/product
+
+    /**
+     * 특정 유저의 숨김 글 전체 조회 API
+     * [GET] /product/hide/:userId=
+     */
+    @ResponseBody
+    @GetMapping("/hide/{userId}") // (GET) http://simhani1.shop:9000/app/product/hide/:userId
+    public BaseResponse<List<GetArticleRes>> getHidedArticles(@PathVariable int userId) {
+        try {
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            List<GetArticleRes> GetHidedArticlesRes = productProvider.getHidedArticlesRes(userId);
+            return new BaseResponse<>(GetHidedArticlesRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -227,7 +251,6 @@ public class ProductController {
     /**
      * 판매 글 삭제 API
      * [PATCH] /status/:productId
-     *
      */
     @ResponseBody
     @PatchMapping("/status/delete/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:productId
@@ -282,28 +305,27 @@ public class ProductController {
     }
 
 //    /**
-//     * 회원탈퇴 API
-//     * [PATCH] /users/withdraw/:userId
+//     * 판매 글 제목 수정 API
+//     * [PATCH] /users/:userId
 //     *
 //     */
 //    @ResponseBody
-//    @PatchMapping("/withdraw/{userId}")
-//    public BaseResponse<String> modifyUserStatus(@PathVariable("userId") int userId, @RequestBody User user) {
+//    @PatchMapping("/status/title/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/title/:userId/:productId
+//
+//    public BaseResponse<String> modifyTitle(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
 //        try {
-///*
-//  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-//            //jwt에서 idx 추출.
-//            int userIdByJwt = jwtService.getUserIdx();
+//            //////////////////////////////////////  JWT
+//            //jwt에서 idx 추출
+//            int userIdByJwt = jwtService.getUserId();
 //            //userId와 접근한 유저가 같은지 확인
 //            if(userId != userIdByJwt){
 //                return new BaseResponse<>(INVALID_USER_JWT);
 //            }
+//            //////////////////////////////////////  JWT
 //            //같다면 유저네임 변경
-//  **************************************************************************
-// */
-//            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname(), user.getStatus());
-//            userService.modifyUserStatus(patchUserReq);
-//            String result = "탈퇴처리 되었습니다.";
+//            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
+//            userService.modifyUserName(patchUserReq);
+//            String result = "닉네임이 변경되었습니다.";
 //            return new BaseResponse<>(result);
 //        } catch (BaseException exception) {
 //            return new BaseResponse<>((exception.getStatus()));

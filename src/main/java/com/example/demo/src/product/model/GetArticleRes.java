@@ -21,6 +21,18 @@ public class GetArticleRes {
         this.price = price;
     }
 
+    // 특정 유저의 숨김 글 전체 조회
+    public GetArticleRes(String productImgUrl, String title, String address, String updatedAt, int condition, int chatRoomCnt, int heartCnt, String price) {
+        this.productImgUrl = productImgUrl;
+        this.title = title;
+        this.address = address;
+        this.updatedAt = updatedAt;
+        this.condition = condition;
+        this.chatRoomCnt = chatRoomCnt;
+        this.heartCnt = heartCnt;
+        this.price = price;
+    }
+
     // 판매 글 조회(판매 글 메인화면)
     public GetArticleRes(String productImgUrl, String nickname, String profileImgUrl, double mannerTemp, int condition, String title, String address, String categoryName, String updatedAt, String contents, int chatRoomCnt, int heartCnt, String price, String negotiation) {
         this.productImgUrl = productImgUrl;

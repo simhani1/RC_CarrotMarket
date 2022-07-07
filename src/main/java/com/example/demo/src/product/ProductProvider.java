@@ -119,6 +119,16 @@ public class ProductProvider {
             throw new BaseException(DATABASE_ERROR);
         }
     }
+
+    // 특정 유저의 숨김 글 전체 조회(userId)
+    public List<GetArticleRes> getHidedArticlesRes(int userId) throws BaseException {
+        try {
+            List<GetArticleRes> GetHidedArticlesRes = productDao.getHidedArticlesRes(userId);
+            return GetHidedArticlesRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    // 해당 userId를 갖는 User의 정보 조회
 //    public GetUserRes getUser(int userId) throws BaseException {

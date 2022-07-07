@@ -18,6 +18,7 @@ import java.util.List;
  * 데이터베이스 관련 작업을 전담하는 클래스
  * 데이터베이스에 연결하여, 입력 , 수정, 삭제, 조회 등의 작업을 수행
  */
+
 public class ProductDao {
 
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
@@ -29,10 +30,6 @@ public class ProductDao {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
     // ******************************************************************************
-
-
-
-
 
     //////////////////////////////////////  POST
 
@@ -269,6 +266,42 @@ public class ProductDao {
                         rs.getInt("heartCnt"),
                         rs.getString("price"))
         );
+    }
+
+    public List<GetArticleRes> getHidedArticlesRes(int userId) {
+        String getHidedArticlesByuserIdQuery = "select\n" +
+                "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
+                "    Product.title as 'title',\n" +
+                "    User.address as 'address',\n" +
+                "    case when timestampdiff(second , Product.updatedAt, current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , Product.updatedAt, current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , Product.updatedAt, current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, Product.updatedAt),' 일 전')\n" +
+                "           end as 'updatedAt',\n" +
+                "    Product.condition as 'condition',\n" +
+                "    (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt',\n" +
+                "    (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt',\n" +
+                "    format(Product.price, 0) as 'price'\n" +
+                "from Product\n" +
+                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
+                "    inner join User on Product.userId = User.userId\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'Y' and User.userId = ? and ProductImg.mainImg = true\n" +
+                "order by Product.updatedAt desc";
+        int getHidedArticlesByuserIdParams = userId;
+        return this.jdbcTemplate.query(getHidedArticlesByuserIdQuery,
+                (rs, rowNum) -> new GetArticleRes(
+                        rs.getString("productImgUrl"),
+                        rs.getString("title"),
+                        rs.getString("address"),
+                        rs.getString("updatedAt"),
+                        rs.getInt("condition"),
+                        rs.getInt("chatRoomCnt"),
+                        rs.getInt("heartCnt"),
+                        rs.getString("price")),
+                getHidedArticlesByuserIdParams);
     }
 //
 //    // 해당 userId를 갖는 유저 프로필 조회
