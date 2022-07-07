@@ -1,10 +1,16 @@
 package com.example.demo.src.review;
 
+import com.example.demo.config.BaseException;
+import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
 
 //Provider : Read의 비즈니스 로직 처리
 @Service    // [Business Layer에서 Service를 명시하기 위해서 사용] 비즈니스 로직이나 respository layer 호출하는 함수에 사용된다.
@@ -70,17 +76,17 @@ public class ReviewProvider {
 //////        }
 //////    }
 ////
-////    //////////////////////////////////////  GET
-////
-//    // 전체 판매 글 목록 조회(홈화면)
-//    public List<GetArticleRes> getArticles() throws BaseException {
-//        try {
-//            List<GetArticleRes> GetArticlesRes = productDao.getArticles();
-//            return GetArticlesRes;
-//        } catch (Exception exception) {
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+    //////////////////////////////////////  GET
+
+    // 특정 유저가 받은 거래후기 조회 (Get)
+    public List<GetReviewRes> getReviews(int userId) throws BaseException {
+        try {
+            List<GetReviewRes> GetReviewsRes = reviewDao.getReviews(userId);
+            return GetReviewsRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    // 특정 유저의 판매 글 검색
 //    public List<GetArticleRes> getArticlesByNickname(String nickname) throws BaseException {

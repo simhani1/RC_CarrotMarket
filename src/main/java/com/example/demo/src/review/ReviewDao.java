@@ -1,12 +1,14 @@
 package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.src.review.model.PostReviewReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Repository //  [Persistence Layer에서 DAO를 명시하기 위해 사용]
 
@@ -100,7 +102,38 @@ public class ReviewDao {
 ////        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
 ////    }
 ////
-////    //////////////////////////////////////  GET
+    //////////////////////////////////////  GET
+
+    // 특정 유저가 받은 거래후기 조회 (Get)
+    public List<GetReviewRes> getReviews(int userId) {
+        String getReviewsQuery = "select\n" +
+                "    User.profileImgUrl as 'profileImgUrl',\n" +
+                "    User.nickname as 'nickname',\n" +
+                "    User.address as 'address',\n" +
+                "    case when timestampdiff(second , PurchaseReview.updatedAt, current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, PurchaseReview.updatedAt, current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , PurchaseReview.updatedAt, current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, PurchaseReview.updatedAt, current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , PurchaseReview.updatedAt, current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, PurchaseReview.updatedAt, current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, PurchaseReview.updatedAt),' 일 전')\n" +
+                "           end as 'updatedAt',\n" +
+                "    PurchaseReview.reviewContents as 'reviewContents'\n" +
+                "from PurchaseReview\n" +
+                "inner join Product on PurchaseReview.productId = Product.productid\n" +
+                "inner join User on PurchaseReview.buyerId = User.userId\n" +
+                "where PurchaseReview.productId = Product.productId and Product.userId = ?\n" +
+                "order by PurchaseReview.updatedAt desc";
+        int getReviewsParams = userId;
+        return this.jdbcTemplate.query(getReviewsQuery,
+                (rs, rowNum) -> new GetReviewRes(
+                        rs.getString("profileImgUrl"),
+                        rs.getString("nickname"),
+                        rs.getString("address"),
+                        rs.getString("updatedAt"),
+                        rs.getString("reviewContents")),
+                getReviewsParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+    }
 //
 //    // 전체 판매 글 목록 조회(홈화면) (Get)
 //    public List<GetArticleRes> getArticles() {
@@ -136,40 +169,6 @@ public class ReviewDao {
 //        );
 //    }
 //
-//    // 특정 유저의 판매 글 검색 (Get)
-//    public List<GetArticleRes> getArticlesByNickname(String nickname) {
-//        String getArticlesByNicknameQuery = "select\n" +
-//                "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
-//                "    Product.title as 'title',\n" +
-//                "    User.address as 'address',\n" +
-//                "    case when timestampdiff(second , Product.updatedAt, current_timestamp) <60\n" +
-//                "           then concat(timestampdiff(second, Product.updatedAt, current_timestamp),' 초 전')\n" +
-//                "           when timestampdiff(minute , Product.updatedAt, current_timestamp) <60\n" +
-//                "               then concat(timestampdiff(minute, Product.updatedAt, current_timestamp),' 분 전')\n" +
-//                "           when timestampdiff(hour , Product.updatedAt, current_timestamp) <24\n" +
-//                "               then concat(timestampdiff(hour, Product.updatedAt, current_timestamp),' 시간 전')\n" +
-//                "           else concat(datediff(current_timestamp, Product.updatedAt),' 일 전')\n" +
-//                "           end as 'updatedAt',\n" +
-//                "    (select count(CR.chatRoomId) from ChattingRoom CR where Product.productId = CR.productId) as 'chatRoomCnt',\n" +
-//                "    (select count(HL.heartId) from HeartList HL where Product.productId = HL.productId) as 'heartCnt',\n" +
-//                "    format(Product.price, 0) as 'price'\n" +
-//                "from Product\n" +
-//                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
-//                "    inner join User on Product.userId = User.userId\n" +
-//                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and User.nickname = ? and ProductImg.mainImg = true\n" +
-//                "order by Product.updatedAt desc";
-//        String getArticlesByNicknameParams = nickname;
-//        return this.jdbcTemplate.query(getArticlesByNicknameQuery,
-//                (rs, rowNum) -> new GetArticleRes(
-//                        rs.getString("productImgUrl"),
-//                        rs.getString("title"),
-//                        rs.getString("address"),
-//                        rs.getString("updatedAt"),
-//                        rs.getInt("chatRoomCnt"),
-//                        rs.getInt("heartCnt"),
-//                        rs.getString("price")),
-//                getArticlesByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
-//    }
 //
 //    // 판매 글 조회(판매 글 메인화면) (Get)
 //    public GetArticleRes getArticleByProductId(int productId) {

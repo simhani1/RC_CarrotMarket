@@ -2,6 +2,7 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
+import com.example.demo.src.review.model.GetReviewRes;
 import com.example.demo.src.review.model.PostReviewReq;
 import com.example.demo.src.review.model.PostReviewRes;
 import com.example.demo.utils.JwtService;
@@ -9,6 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
@@ -95,8 +98,31 @@ public class ReviewController {
 ////        }
 ////    }
 ////
-////    //////////////////////////////////////  GET
-////
+    //////////////////////////////////////  GET
+
+    /**
+     * 특정 유저가 받은 거래후기 조회 API
+     * [GET] /reviews/:userId
+     */
+    @ResponseBody
+    @GetMapping("/{userId}") // (GET) http://simhani1.shop:9000/app/reviews/:userId
+    public BaseResponse<List<GetReviewRes>> getReview(@PathVariable("userId") int userId) {
+        try {
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            List<GetReviewRes> getReviewRes = reviewProvider.getReviews(userId);
+            return new BaseResponse<>(getReviewRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 //
 //    /**
 //     * 전체 판매 글 목록 조회(홈화면) API
@@ -202,25 +228,6 @@ public class ReviewController {
 ////        }
 ////    }
 ////
-////    /**
-////     * 회원 1명 조회 API
-////     * [GET] /users/:userId
-////     */
-////    // Path-variable
-////    @ResponseBody
-////    @GetMapping("/{userId}") // (GET) http://simhani1.shop:9000/app/users/:userId
-////    public BaseResponse<GetUserRes> getUser(@PathVariable("userId") int userId) {
-////        // @PathVariable RESTful(URL)에서 명시된 파라미터({})를 받는 어노테이션, 이 경우 userId값을 받아옴.
-////        //  null값 or 공백값이 들어가는 경우는 적용하지 말 것
-////        //  .(dot)이 포함된 경우, .을 포함한 그 뒤가 잘려서 들어감
-////        // Get Users
-////        try {
-////            GetUserRes getUserRes = userProvider.getUser(userId);
-////            return new BaseResponse<>(getUserRes);
-////        } catch (BaseException exception) {
-////            return new BaseResponse<>((exception.getStatus()));
-////        }
-////    }
 ////
 ////    /**
 ////     * 프로필 조회 API

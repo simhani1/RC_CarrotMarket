@@ -9,4 +9,21 @@ import lombok.Setter;
 @AllArgsConstructor // 해당 클래스의 모든 멤버 변수를 받는 생성자를 생성
 
 public class GetReviewRes {
+
+    // 특정 유저가 받은 거래후기 조회
+    public GetReviewRes(String profileImgUrl, String nickname, String address, String updatedAt, String reviewContents) {
+        this.profileImgUrl = profileImgUrl;
+        this.nickname = nickname;
+        this.address = address;
+        this.updatedAt = updatedAt;
+        this.reviewContents = reviewContents;
+    }
+    private int reviewCnt;
+    private String profileImgUrl;
+    private String nickname;
+    private String address;
+    private String updatedAt;
+    private String reviewContents;
+    private int sellerId;
+    private int productId;
 }
