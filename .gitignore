@@ -42,7 +42,8 @@
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
 .idea/**/dbnavigator.xml
-.Secret
+
+/RC_CarrotMarket/src/main/java/com/example/demo/config/secret/Secret.java
 
 # Gradle
 .idea/**/gradle.xml
