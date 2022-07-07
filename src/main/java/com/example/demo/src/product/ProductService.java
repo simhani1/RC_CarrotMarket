@@ -46,7 +46,7 @@ public class ProductService {
 
     //////////////////////////////////////  POST
 
-    // 판매 글 작성(POST)
+    // 판매 글 작성 (POST)
     public PostProductRes createArticle(PostProductReq postArticleReq, int userId) throws BaseException {
         int productId = 0;
         try {
@@ -68,7 +68,7 @@ public class ProductService {
 
     //////////////////////////////////////  PATCH
 
-    // 판매 글 삭제(Patch)
+    // 판매 글 삭제 (Patch)
     public void removeProduct(PatchProductReq removeProductReq) throws BaseException {
         try {
             int result = productDao.removeProduct(removeProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
@@ -80,7 +80,7 @@ public class ProductService {
         }
     }
 
-    // 끌어올리기(Patch)
+    // 끌어올리기 (Patch)
     public void updateProduct(PatchProductReq updateProductReq) throws BaseException {
         try {
             int result = productDao.updateProduct(updateProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
@@ -91,16 +91,64 @@ public class ProductService {
             throw new BaseException(DATABASE_ERROR);
         }
     }
-//
-//    // 회원 탈퇴(Patch)
-//    public void modifyUserStatus(PatchUserReq patchUserReq) throws BaseException {
-//        try {
-//            int result = userDao.modifyUserStatus(patchUserReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
-//            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
-//                throw new BaseException(MODIFY_FAIL_USERSTATUS);
-//            }
-//        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+
+    // 판매 글 제목 수정 (Patch)
+    public void modifyTitle(PatchProductReq patchProductReq) throws BaseException {
+        try {
+            int result = productDao.modifyTitle(patchProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+                throw new BaseException(MODIFY_FAIL_TITLE);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 판매 글 가격 수정 (Patch)
+    public void modifyPrice(PatchProductReq patchProductReq) throws BaseException {
+        try {
+            int result = productDao.modifyPrice(patchProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+                throw new BaseException(MODIFY_FAIL_PRICE);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 판매 글 본문 수정 (Patch)
+    public void modifyContents(PatchProductReq patchProductReq) throws BaseException {
+        try {
+            int result = productDao.modifyContents(patchProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+                throw new BaseException(MODIFY_FAIL_PRICE);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 판매 글 가격제안 수정 (Patch)
+    public void modifyNegotiation(PatchProductReq patchProductReq) throws BaseException {
+        try {
+            int result = productDao.modifyNegotiation(patchProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+                throw new BaseException(MODIFY_FAIL_NEGOTIATION);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
+    // 판매 글 상태 변경 (Patch)
+    public void changeCondition(PatchProductReq patchProductReq) throws BaseException {
+        try {
+            int result = productDao.changeCondition(patchProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메서지를 보냅니다.
+                throw new BaseException(MODIFY_FAIL_CONDITION);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 }

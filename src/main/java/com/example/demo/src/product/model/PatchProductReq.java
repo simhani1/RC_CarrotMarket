@@ -11,21 +11,44 @@ import lombok.*;
 // 끌어올리기
 
 public class PatchProductReq {
-    // 판매 글 삭제 API
-    // 끌어올리기 API
+    // 판매 글 삭제 & 끌어올리기
     public PatchProductReq(int productId) {
         this.productId = productId;
     }
 
+    // 판매 글 제목 & 본문 & 가격제안 수정
+    public PatchProductReq(int userId, int productId, String string, String value) {
+        this.userId = userId;
+        this.productId = productId;
+        if(value.equals("title"))
+            this.title = string;
+        else if(value.equals("contents"))
+            this.contents = string;
+        else if(value.equals("negotiation"))
+            this.negotiation = string;
+        else if(value.equals("condition"))
+            this.condition = string;
+    }
+
+    // 판매 글 가격 수정
+    public PatchProductReq(int userId, int productId, int integer, String value) {
+        this.userId = userId;
+        this.productId = productId;
+        if(value.equals("price"))
+            this.price = integer;
+    }
+
     private int userId;
     private int buyerId;
+    private int price;
+    private int productId;
+    private int categoryId;
+
     private String nickname;
     private String buyerNickname;
-    private int productId;
     private String title;
     private String contents;
-    private int categoryId;
-    private int price;
     private String negotiation;
     private String status;
+    private String condition;
 }

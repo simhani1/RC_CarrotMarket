@@ -55,18 +55,9 @@ public class ProductDao {
         return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 판매 글의 productId를 반환한다.
     }
 
-//    // 휴대폰 번호 확인
-//    public int checkPhoneNumber(String phoneNumber) {
-//        String checkPhoneNumberQuery = "select exists(select phoneNum from User where phoneNum = ?)"; // User Table에 해당 email 값을 갖는 유저 정보가 존재하는가?
-//        String checkPhoneNumberParams = phoneNumber; // 해당(확인할) 이메일 값
-//        return this.jdbcTemplate.queryForObject(checkPhoneNumberQuery,
-//                int.class,
-//                checkPhoneNumberParams); // checkPhoneNumberQuery, checkPhoneNumberParams를 통해 가져온 값(intgud)을 반환한다. -> 쿼리문의 결과(존재하지 않음(False,0),존재함(True, 1))를 int형(0,1)으로 반환됩니다.
-//    }
-
     //////////////////////////////////////  PATCH
 
-    // 판매 글 삭제(Patch)
+    // 판매 글 삭제 (Patch)
     public int removeProduct(PatchProductReq patchProductReq) {
         String removeProductQuery = "UPDATE RC_CarrotMarket.Product\n" +
                 "SET `\bstatus` = 'Y'\n" +
@@ -75,7 +66,7 @@ public class ProductDao {
         return this.jdbcTemplate.update(removeProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
-    // 끌어올리기(Patch)
+    // 끌어올리기 (Patch)
     public int updateProduct(PatchProductReq updateProductReq) {
         String updateProductQuery = "update Product\n" +
                 "set updatedAt=current_time\n" +
@@ -83,15 +74,41 @@ public class ProductDao {
         int removeProductParams = updateProductReq.getProductId();
         return this.jdbcTemplate.update(updateProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
-//
-//    // 회원탈퇴 처리
-//    public int modifyUserStatus(PatchUserReq patchUserReq) {
-//        String modifyUserStatusQuery = "update User set status = ? where userId = ? "; // 해당 userId를 만족하는 User를 해당 status로 변경한다.
-//        Object[] modifyUserStatusParams = new Object[]{patchUserReq.getStatus(), patchUserReq.getUserId()}; // 주입될 값들(status, userId) 순
-//
-//        return this.jdbcTemplate.update(modifyUserStatusQuery, modifyUserStatusParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
-//    }
-//
+
+    // 판매 글 제목 수정 (Patch)
+    public int modifyTitle(PatchProductReq patchProductReq) {
+        String modifyTitleQuery = "update Product set title = ? where userId = ? and productId = ? ";
+        Object[] modifyTitleParams = new Object[]{patchProductReq.getTitle(), patchProductReq.getUserId(), patchProductReq.getProductId()};
+        return this.jdbcTemplate.update(modifyTitleQuery, modifyTitleParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
+
+    // 판매 글 가격 수정 (Patch)
+    public int modifyPrice(PatchProductReq patchProductReq) {
+        String modifyPriceQuery = "update Product set price = ? where userId = ? and productId = ? ";
+        Object[] modifyPriceParams = new Object[]{patchProductReq.getPrice(), patchProductReq.getUserId(), patchProductReq.getProductId()};
+        return this.jdbcTemplate.update(modifyPriceQuery, modifyPriceParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
+
+    // 판매 글 본문 수정 (Patch)
+    public int modifyContents(PatchProductReq patchProductReq) {
+        String modifyContentsQuery = "update Product set contents = ? where userId = ? and productId = ? ";
+        Object[] modifyContentsParams = new Object[]{patchProductReq.getContents(), patchProductReq.getUserId(), patchProductReq.getProductId()};
+        return this.jdbcTemplate.update(modifyContentsQuery, modifyContentsParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
+
+    // 판매 글 가격제안 수정 (Patch)
+    public int modifyNegotiation(PatchProductReq patchProductReq) {
+        String modifyNegotiationQuery = "update Product set negotiation = ? where userId = ? and productId = ? ";
+        Object[] modifyNegotiationParams = new Object[]{patchProductReq.getNegotiation(), patchProductReq.getUserId(), patchProductReq.getProductId()};
+        return this.jdbcTemplate.update(modifyNegotiationQuery, modifyNegotiationParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
+
+    // 판매 글 상태 변경 (Patch)
+    public int changeCondition(PatchProductReq patchProductReq) {
+        String changeConditionQuery = "update Product set `condition` = ? where userId = ? and productId = ? ";
+        Object[] changeConditionParams = new Object[]{patchProductReq.getCondition(), patchProductReq.getUserId(), patchProductReq.getProductId()};
+        return this.jdbcTemplate.update(changeConditionQuery, changeConditionParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+    }
 //    //////////////////////////////////////  POST
 //
 //    // 로그인: 해당 휴대폰 번호에 해당되는 user의 암호화된 비밀번호 값을 가져온다.
@@ -109,7 +126,8 @@ public class ProductDao {
 //        ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
 //    }
 //
-//    //////////////////////////////////////  GET
+
+    //////////////////////////////////////  GET
 
     // 전체 판매 글 목록 조회(홈화면) (Get)
     public List<GetArticleRes> getArticles() {
@@ -131,7 +149,7 @@ public class ProductDao {
                 "from Product\n" +
                 "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
                 "    inner join User on Product.userId = User.userId\n" +
-                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and ProductImg.mainImg = true\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and ProductImg.mainImg = true\n" +
                 "order by Product.updatedAt desc";
         return this.jdbcTemplate.query(getArticlesQuery,
                 (rs, rowNum) -> new GetArticleRes (
@@ -145,7 +163,7 @@ public class ProductDao {
         );
     }
 
-    // 특정 유저의 판매 글 검색 (Get)
+    // 특정 유저의 판매 글 조회(nickname) (Get)
     public List<GetArticleRes> getArticlesByNickname(String nickname) {
         String getArticlesByNicknameQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
@@ -165,7 +183,7 @@ public class ProductDao {
                 "from Product\n" +
                 "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
                 "    inner join User on Product.userId = User.userId\n" +
-                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and User.nickname = ? and ProductImg.mainImg = true\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and User.nickname = ? and ProductImg.mainImg = true\n" +
                 "order by Product.updatedAt desc";
         String getArticlesByNicknameParams = nickname;
         return this.jdbcTemplate.query(getArticlesByNicknameQuery,
@@ -180,7 +198,7 @@ public class ProductDao {
                 getArticlesByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
-    // 판매 글 조회(판매 글 메인화면) (Get)
+    // 판매 글 조회(판매 글 메인화면)(productId) (Get)
     public GetArticleRes getArticleByProductId(int productId) {
         String getArticleByProductIdQuery = "select\n" +
                 "    ProductImg.productImgurl as 'productImgUrl',\n" +
@@ -254,7 +272,7 @@ public class ProductDao {
                 "from Product\n" +
                 "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
                 "    inner join User on Product.userId = User.userId\n" +
-                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 1 and Product.title like '%?%' and ProductImg.mainImg = true\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and Product.title like '%?%' and ProductImg.mainImg = true\n" +
                 "order by Product.updatedAt desc";
         return this.jdbcTemplate.query(getArticlesQuery,
                 (rs, rowNum) -> new GetArticleRes (
@@ -268,6 +286,7 @@ public class ProductDao {
         );
     }
 
+    // 특정 유저(본인)의 숨김 내역 조회(userId) (Get)
     public List<GetArticleRes> getHidedArticlesRes(int userId) {
         String getHidedArticlesByuserIdQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +

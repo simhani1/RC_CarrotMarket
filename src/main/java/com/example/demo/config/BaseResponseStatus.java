@@ -22,10 +22,10 @@ public enum BaseResponseStatus {
     INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
     INVALID_USER_JWT(false,2003,"권한이 없는 유저의 접근입니다."),
 
-    // users
+    // user
     USERS_EMPTY_USER_ID(false, 2010, "유저 아이디 값을 확인해주세요."),
 
-    // [POST] /users
+    // [POST] /user
     POST_USERS_EMPTY_PHONENUMBER (false, 2015, "휴대폰 번호를을 입력해주세요."),
     POST_USERS_INVALID_PHONENUMBER(false, 2016, "휴대폰 번호 형식을 확인해주세요."),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
@@ -60,7 +60,13 @@ public enum BaseResponseStatus {
     // [PATCH] /product/status/delete/{productId}
 
     REMOVE_FAIL_PRODUCT(false, 4100, "글 삭제에 실패하였습니다."),
-    UPDATE_FAIL_PRODUCT(false, 4101, "끌어올리기에 실패하였습니다.");
+    UPDATE_FAIL_PRODUCT(false, 4101, "끌어올리기에 실패하였습니다."),
+
+    // [PATCH] /product/status/title/{userId}/{productId}
+    MODIFY_FAIL_TITLE(false, 4200, "제목 수정에 실패하였습니다."),
+    MODIFY_FAIL_PRICE(false, 4201, "가격 수정에 실패하였습니다."),
+    MODIFY_FAIL_NEGOTIATION(false, 4202, "가격제안 변경에 실패하였습니다."),
+    MODIFY_FAIL_CONDITION(false, 4202, "상태 변경에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

@@ -20,7 +20,7 @@ public class Product {
     private String negotiation;
     private String contents;
     private int buyerId;
-    private int condition;
+    private String condition;
     private String updatedAt;
     private String status;
     private int updatedCnt;

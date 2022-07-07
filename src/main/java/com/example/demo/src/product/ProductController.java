@@ -2,10 +2,7 @@ package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.product.model.GetArticleRes;
-import com.example.demo.src.product.model.PatchProductReq;
-import com.example.demo.src.product.model.PostProductReq;
-import com.example.demo.src.product.model.PostProductRes;
+import com.example.demo.src.product.model.*;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+import static com.example.demo.config.BaseResponseStatus.*;
 
 @RestController // Rest API 또는 WebAPI를 개발하기 위한 어노테이션. @Controller + @ResponseBody 를 합친것.
 // @Controller      [Presentation Layer에서 Contoller를 명시하기 위해 사용]
@@ -304,31 +301,147 @@ public class ProductController {
         }
     }
 
-//    /**
-//     * 판매 글 제목 수정 API
-//     * [PATCH] /users/:userId
-//     *
-//     */
-//    @ResponseBody
-//    @PatchMapping("/status/title/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/title/:userId/:productId
-//
-//    public BaseResponse<String> modifyTitle(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
-//        try {
-//            //////////////////////////////////////  JWT
-//            //jwt에서 idx 추출
-//            int userIdByJwt = jwtService.getUserId();
-//            //userId와 접근한 유저가 같은지 확인
-//            if(userId != userIdByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //////////////////////////////////////  JWT
-//            //같다면 유저네임 변경
-//            PatchUserReq patchUserReq = new PatchUserReq(userId, user.getNickname());
-//            userService.modifyUserName(patchUserReq);
-//            String result = "닉네임이 변경되었습니다.";
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    /**
+     * 판매 글 제목 수정 API
+     * [PATCH] /status/title/:userId/:productId
+     */
+    @ResponseBody
+    @PatchMapping("/status/title/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/title/:userId/:productId
+
+    public BaseResponse<String> modifyTitle(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
+        try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getTitle(), "title");
+            productService.modifyTitle(patchProductReq);
+            String result = "제목이 수정되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 판매 글 가격 수정 API
+     * [PATCH] /status/price/:userId/:productId
+     */
+    @ResponseBody
+    @PatchMapping("/status/price/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/price/:userId/:productId
+
+    public BaseResponse<String> modifyPrice(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
+        try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getPrice(), "price");
+            productService.modifyPrice(patchProductReq);
+            String result = "가격이 수정되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 판매 글 본문 수정 API
+     * [PATCH] /status/contents/:userId/:productId
+     */
+    @ResponseBody
+    @PatchMapping("/status/contents/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/contents/:userId/:productId
+
+    public BaseResponse<String> modifyContents(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
+        try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getContents(), "contents");
+            productService.modifyContents(patchProductReq);
+            String result = "본문이 수정되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 판매 글 가격제안 수정 API
+     * [PATCH] /status/negotiation/:userId/:productId
+     */
+    @ResponseBody
+    @PatchMapping("/status/negotiation/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/negotiation/:userId/:productId
+
+    public BaseResponse<String> modifyNegotiation(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
+        try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getNegotiation(), "negotiation");
+            productService.modifyNegotiation(patchProductReq);
+            String result;
+            // Y / N 만 입력되도록 검사
+            if(product.getNegotiation().equals("Y") || product.getNegotiation().equals("N")) {
+                result = "가격제안이 수정되었습니다.";
+            }
+            else{
+                return new BaseResponse<>(REQUEST_ERROR);
+            }
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 판매 글 상태 변경 API
+     * [PATCH] /status/condition/:userId/:productId
+     */
+    @ResponseBody
+    @PatchMapping("/status/condition/{userId}/{productId}")  /// (PATCH) http://simhani1.shop:9000/app/product/status/condition/:userId/:productId
+
+    public BaseResponse<String> changeCondition(@PathVariable("userId") int userId, @PathVariable("productId") int productId, @RequestBody Product product) {
+        try {
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if(userId != userIdByJwt){
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getCondition(), "condition");
+            productService.changeCondition(patchProductReq);
+            String result;
+            // F(판매 완료), S(판매중), R(예약중) 만 입력되도록 검사
+            if(product.getCondition().equals("F") || product.getCondition().equals("S") || product.getCondition().equals("R")) {
+                result = "물건 상태가 변경되었습니다.";
+            }
+            else{
+                return new BaseResponse<>(REQUEST_ERROR);
+            }
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 }
