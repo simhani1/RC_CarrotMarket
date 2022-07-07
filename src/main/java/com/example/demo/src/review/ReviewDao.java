@@ -1,5 +1,7 @@
 package com.example.demo.src.review;
 
+import com.example.demo.config.BaseException;
+import com.example.demo.src.review.model.PostReviewReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -27,27 +29,22 @@ public class ReviewDao {
 
     //////////////////////////////////////  POST
 
-//    // 판매 글 작성(Post)
-//    public int createArticle(PostProductReq postProductReq) throws BaseException {
-//        String createArticleQuery = "insert into Product (userId, title, categoryId, price, negotiation, contents) VALUES (?, ?, ?, ?, ?, ?)";
-//        Object[] createArticleParams = new Object[]{postProductReq.getUserId(), postProductReq.getTitle(), postProductReq.getCategoryId(), postProductReq.getPrice(), postProductReq.getNegotiation(), postProductReq.getContents()};
-//        // 내용이 정확하게 입력됐는지 검사
-//        for(Object obj : createArticleParams) {
-//            if (obj.getClass().getSimpleName().equals("String")) {
-//                if (obj.equals(null)) {
-//                    return -1;
-//                }
-//            }
-//            else {
-//                if ((int) obj < 0) {
-//                    return -1;
-//                }
-//            }
-//        }
-//        this.jdbcTemplate.update(createArticleQuery, createArticleParams);
-//        String lastInsertIdQuery = "select count(*) from Product"; // Product 테이블에서 가장 마지막에 삽입된(생성된) id값을 가져온다.
-//        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 판매 글의 productId를 반환한다.
-//    }
+    // 리뷰 작성(POST)
+    public int createReview(PostReviewReq postReviewReq) throws BaseException {
+        String createReviewQuery = "insert into PurchaseReview (buyerId, productId, reviewContents) VALUES (?, ?, ?)";
+        Object[] createReviewParams = new Object[]{postReviewReq.getBuyerId(), postReviewReq.getProductId(), postReviewReq.getReviewContents()};
+        // 내용이 정확하게 입력됐는지 검사
+        for(Object obj : createReviewParams) {
+            if (obj.getClass().getSimpleName().equals("Integer")) {
+                if ((int) obj < 0) {
+                    return -1;
+                }
+            }
+        }
+        this.jdbcTemplate.update(createReviewQuery, createReviewParams);
+        String lastInsertIdQuery = "select count(*) from PurchaseReview"; // PurchaseReview 테이블에서 가장 마지막에 삽입된(생성된) id값을 가져온다.
+        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 판매 글의 reviewId를 반환한다.
+    }
 //
 ////    // 휴대폰 번호 확인
 ////    public int checkPhoneNumber(String phoneNumber) {

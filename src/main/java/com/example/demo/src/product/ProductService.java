@@ -62,7 +62,7 @@ public class ProductService {
             if(productId == -1) {
                 throw new BaseException(REQUEST_ERROR);
             }
-            throw new BaseException(REMOVE_FAIL_PRODUCT);
+            throw new BaseException(DATABASE_ERROR);
         }
     }
 

@@ -1,10 +1,15 @@
 package com.example.demo.src.review;
 
+import com.example.demo.config.BaseException;
+import com.example.demo.src.review.model.PostReviewReq;
+import com.example.demo.src.review.model.PostReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import static com.example.demo.config.BaseResponseStatus.*;
 
 /**
  * Service란?
@@ -40,25 +45,25 @@ public class ReviewService {
 
     //////////////////////////////////////  POST
 
-//    // 판매 글 작성(POST)
-//    public PostProductRes createArticle(PostProductReq postArticleReq, int userId) throws BaseException {
-//        int productId = 0;
-//        try {
-//            productId = productDao.createArticle(postArticleReq);  // 작성한 판매 글의 productId를 반환받음
-//            // 값이 정확하게 입력되지 않은 경우
-//            if(productId == -1){
-//                throw new Exception();
-//            }
-//            String jwt = jwtService.createJwt(userId);
-//            return new PostProductRes(userId, jwt, productId);
-//        }
-//        catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
-//            if(productId == -1) {
-//                throw new BaseException(REQUEST_ERROR);
-//            }
-//            throw new BaseException(REMOVE_FAIL_PRODUCT);
-//        }
-//    }
+    // 리뷰 작성(POST)
+    public PostReviewRes createReview(PostReviewReq postReviewReq, int buyerId) throws BaseException {
+        int reviewId = 0;
+        try {
+            reviewId = reviewDao.createReview(postReviewReq);  // 작성한 판매 글의 productId를 반환받음
+            // 값이 정확하게 입력되지 않은 경우
+            if(reviewId == -1){
+                throw new Exception();
+            }
+            String jwt = jwtService.createJwt(buyerId);
+            return new PostReviewRes(buyerId, jwt, reviewId);
+        }
+        catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            if(reviewId == -1) {
+                throw new BaseException(REQUEST_ERROR);
+            }
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    //////////////////////////////////////  PATCH
 //

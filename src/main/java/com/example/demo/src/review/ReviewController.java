@@ -1,9 +1,30 @@
 package com.example.demo.src.review;
 
+import com.example.demo.config.BaseException;
+import com.example.demo.config.BaseResponse;
+import com.example.demo.src.review.model.PostReviewReq;
+import com.example.demo.src.review.model.PostReviewRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
+
+@RestController // Rest API 또는 WebAPI를 개발하기 위한 어노테이션. @Controller + @ResponseBody 를 합친것.
+// @Controller      [Presentation Layer에서 Contoller를 명시하기 위해 사용]
+//  [Presentation Layer?] 클라이언트와 최초로 만나는 곳으로 데이터 입출력이 발생하는 곳
+//  Web MVC 코드에 사용되는 어노테이션. @RequestMapping 어노테이션을 해당 어노테이션 밑에서만 사용할 수 있다.
+// @ResponseBody    모든 method의 return object를 적절한 형태로 변환 후, HTTP Response Body에 담아 반환.
+@RequestMapping("/app/reviews")
+// method가 어떤 HTTP 요청을 처리할 것인가를 작성한다.
+// 요청에 대해 어떤 Controller, 어떤 메소드가 처리할지를 맵핑하기 위한 어노테이션
+// URL(/app/users)을 컨트롤러의 메서드와 매핑할 때 사용
+/**
+ * Controller란?
+ * 사용자의 Request를 전달받아 요청의 처리를 담당하는 Service, Prodiver 를 호출
+ */
 
 public class ReviewController {
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
@@ -32,30 +53,30 @@ public class ReviewController {
 
     //////////////////////////////////////  POST
 
-//    /**
-//     * 판매 글 작성 API
-//     * [POST] /product/:userId
-//     */
-//    // Body
-//    @ResponseBody
-//    @PostMapping("/{userId}")  // (POST) http://simhani1.shop:9000/app/product/:userId
-//    public BaseResponse<PostProductRes> createArticle(@RequestBody PostProductReq postArticleReq, @PathVariable int userId) {
-//        try {
-//            // 해당 회원이 맞는지 검사
-//            //////////////////////////////////////  JWT
-//            //jwt에서 idx 추출
-//            int userIdByJwt = jwtService.getUserId();
-//            //userId와 접근한 유저가 같은지 확인
-//            if (userId != userIdByJwt) {
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //////////////////////////////////////  JWT
-//            PostProductRes postArticleRes = productService.createArticle(postArticleReq, userId);
-//            return new BaseResponse<>(postArticleRes);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+    /**
+     * 리뷰 작성 API
+     * [POST] /reviews/:userId/:productId
+     */
+    // Body
+    @ResponseBody
+    @PostMapping("/{buyerId}/{productId}")  // (POST) http://simhani1.shop:9000/app/reviews/:buyerId/:productId
+    public BaseResponse<PostReviewRes> createReview(@RequestBody PostReviewReq postReviewReq, @PathVariable int buyerId) {
+        try {
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if (buyerId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PostReviewRes postReviewRes = reviewService.createReview(postReviewReq, buyerId);
+            return new BaseResponse<>(postReviewRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 ////
 ////    /**
 ////     * 로그인 API
