@@ -10,15 +10,15 @@ import lombok.*;
 public class Product {
     private int userId;
     private int productId;
-    private String title;
     private int categoryId;
     private int price;
+    private int buyerId;
+    private int updatedCnt;
+    private String title;
     private String negotiation;
     private String contents;
-    private int buyerId;
     private String condition;
     private String updatedAt;
     private String status;
-    private int updatedCnt;
     private String isHided;
 }
