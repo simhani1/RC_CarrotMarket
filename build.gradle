@@ -29,7 +29,6 @@ repositories {
 dependencies {
     implementation 'org.jetbrains:annotations:19.0.0'
 
-
     // Spring Boot Starter
     testImplementation ('org.springframework.boot:spring-boot-starter-test')
 
@@ -56,7 +55,6 @@ dependencies {
 
     implementation('org.springframework.boot:spring-boot-starter')
     compile('org.springframework.boot:spring-boot-starter-web')
-
 
 
 

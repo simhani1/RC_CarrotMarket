@@ -213,6 +213,16 @@ public class UserController {
         }
     }
 
+    /**
+     * 카카오 로그인 API
+     * [GET] /users/kakao
+     */
+    @ResponseBody
+    @GetMapping("/kakao")
+    public void  kakaoCallback(@RequestParam String code) throws BaseException {
+        System.out.println(code);  // 카카오로부터 받은 인가코
+    }
+
     //////////////////////////////////////  PATCH
 
     /**
