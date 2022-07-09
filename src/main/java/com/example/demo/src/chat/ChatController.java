@@ -15,9 +15,8 @@ import java.util.List;
 import static com.example.demo.config.BaseResponseStatus.INVALID_USER_JWT;
 
 @RestController
-@Transactional
 @RequestMapping("/app/chat")
-
+@Transactional
 public class ChatController {
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
 

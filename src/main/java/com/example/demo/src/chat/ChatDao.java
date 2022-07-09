@@ -123,11 +123,28 @@ public class ChatDao {
 
     //  특정 유저의 채팅방 목록 조회(userId) (GET)
     public List<GetChatRes> getChatRooms(int userId) {
-        String getChatRoomsQuery ="";
-        int getChatRoomsParams = userId;
+        String getChatRoomsQuery ="select\n" +
+                "    (select User.profileImgUrl from User where User.userId = if(ChattingRoom.recieverId = 1, ChattingRoom.senderId, ChattingRoom.recieverId)) as 'profileImgUrl',\n" +
+                "    (select User.nickname from User where User.userId = if(ChattingRoom.recieverId = 1, ChattingRoom.senderId, ChattingRoom.recieverId)) as 'nickname',\n" +
+                "    (select User.address from User where User.userId = if(ChattingRoom.recieverId = 1, ChattingRoom.senderId, ChattingRoom.recieverId)) as 'address',\n" +
+                "    (select case when timestampdiff(second , max(ChattingMessage.createdAt), current_timestamp) <60\n" +
+                "           then concat(timestampdiff(second, max(ChattingMessage.createdAt), current_timestamp),' 초 전')\n" +
+                "           when timestampdiff(minute , max(ChattingMessage.createdAt), current_timestamp) <60\n" +
+                "               then concat(timestampdiff(minute, max(ChattingMessage.createdAt), current_timestamp),' 분 전')\n" +
+                "           when timestampdiff(hour , max(ChattingMessage.createdAt), current_timestamp) <24\n" +
+                "               then concat(timestampdiff(hour, max(ChattingMessage.createdAt), current_timestamp),' 시간 전')\n" +
+                "           else concat(datediff(current_timestamp, max(ChattingMessage.createdAt)),' 일 전')\n" +
+                "           end from ChattingMessage where ChattingRoom.chatRoomId = ChattingMessage.chatRoomId) as 'createdAt',\n" +
+                "    (select ChattingMessage.message from ChattingMessage where createdAt in(select max(createdAt) from ChattingMessage where ChattingRoom.chatRoomId = ChattingMessage.chatRoomId)) as 'lastMessage',\n" +
+                "    ProductImg.productImgUrl as 'productImgUrl'\n" +
+                "from ChattingRoom\n" +
+                "inner join ProductImg on ChattingRoom.productId = ProductImg.productId and ProductImg.mainImg = true\n" +
+                "where ChattingRoom.recieverId = ? or ChattingRoom.senderId = ? \n" +
+                "order by createdAt";
+        Object[] getChatRoomsParams = new Object[]{userId, userId};
         return this.jdbcTemplate.query(getChatRoomsQuery,
                 (rs, rowNum) -> new GetChatRes(
-                        rs.getString("progileImgUrl"),
+                        rs.getString("profileImgUrl"),
                         rs.getString("nickname"),
                         rs.getString("address"),
                         rs.getString("createdAt"),
