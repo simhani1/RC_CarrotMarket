@@ -201,7 +201,6 @@ public class ProductDao {
     // 판매 글 조회(판매 글 메인화면)(productId) (Get)
     public GetArticleRes getArticleByProductId(int productId) {
         String getArticleByProductIdQuery = "select\n" +
-                "    ProductImg.productImgurl as 'productImgUrl',\n" +
                 "    User.nickname as 'nickname',\n" +
                 "    User.profileImgUrl as 'profileImgUrl',\n" +
                 "    User.mannerTemp as 'mannerTemp',\n" +
@@ -223,23 +222,20 @@ public class ProductDao {
                 "    format(Product.price, 0) as 'price',\n" +
                 "    Product.negotiation as 'negotiation'\n" +
                 "from Product\n" +
-                "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
                 "    inner join Category on Product.categoryId = Category.categoryId\n" +
                 "    inner join User on Product.userId = User.userId\n" +
                 "where\n" +
                 "    Product.productId = ? and\n" +
-                "    ProductImg.mainImg = true and\n" +
                 "    Product.`\bstatus` = 'N' and\n" +
                 "    Product.isHided = 'N' and\n" +
                 "    User.status = 'A'";
         int getArticleByProductIdParams = productId;
         return this.jdbcTemplate.queryForObject(getArticleByProductIdQuery,
                 (rs, rowNum) -> new GetArticleRes(
-                        rs.getString("productImgUrl"),
                         rs.getString("nickname"),
                         rs.getString("profileImgUrl"),
                         rs.getDouble("mannerTemp"),
-                        rs.getInt("condition"),
+                        rs.getString("condition"),
                         rs.getString("title"),
                         rs.getString("address"),
                         rs.getString("categoryName"),
@@ -250,6 +246,19 @@ public class ProductDao {
                         rs.getString("price"),
                         rs.getString("negotiation")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
                 getArticleByProductIdParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+    }
+
+    // 판매 글의 모든 사진 조회(Get)
+    public List<GetArticleRes> getArticleImgByProductId(int productId) {
+        String getArticleImgByProductIdQuery = "select productImgUrl\n" +
+                "from ProductImg\n" +
+                "inner join Product on Product.productId = ProductImg.productId\n" +
+                "where ProductImg.productId = ? and Product.`\bstatus` = 'N'";
+        int getArticleImgByProductIdParams = productId;
+        return this.jdbcTemplate.query(getArticleImgByProductIdQuery,
+                (rs, rowNum) -> new GetArticleRes(
+                        rs.getString("productImgUrl")),
+                getArticleImgByProductIdParams);
     }
 
     // 판매 글 검색(title) (Get)
@@ -316,7 +325,7 @@ public class ProductDao {
                         rs.getString("title"),
                         rs.getString("address"),
                         rs.getString("updatedAt"),
-                        rs.getInt("condition"),
+                        rs.getString("condition"),
                         rs.getInt("chatRoomCnt"),
                         rs.getInt("heartCnt"),
                         rs.getString("price")),

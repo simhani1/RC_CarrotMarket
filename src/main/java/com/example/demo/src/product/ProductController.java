@@ -107,11 +107,26 @@ public class ProductController {
      * [GET] /product/detail/:productId
      */
     @ResponseBody
-    @GetMapping("/detail/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/:productId
+    @GetMapping("/detail/info/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/info/:productId
     public BaseResponse<GetArticleRes> getArticleByProductId(@PathVariable("productId") int productId) {
         try {
             GetArticleRes getArticleByProductIdRes = productProvider.getArticleByProductId(productId);
             return new BaseResponse<>(getArticleByProductIdRes);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
+
+    /**
+     * 판매 글 모든 사진 조회(판매 글 메인화면) API
+     * [GET] /product/detail/img/:productId
+     */
+    @ResponseBody
+    @GetMapping("/detail/img/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/img/:productId
+    public BaseResponse<List<GetArticleRes>> getArticleImgByProductId(@PathVariable("productId") int productId) {
+        try {
+            List<GetArticleRes> getArticleImgByProductIdRes = productProvider.getArticleImgByProductId(productId);
+            return new BaseResponse<>(getArticleImgByProductIdRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

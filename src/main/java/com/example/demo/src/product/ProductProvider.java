@@ -83,6 +83,16 @@ public class ProductProvider {
         }
     }
 
+    // 판매 글의 모든 사진 조회(메인화면)
+    public List<GetArticleRes> getArticleImgByProductId(int productId) throws BaseException {
+        try {
+            List<GetArticleRes> GetArticleImgByProductIdRes = productDao.getArticleImgByProductId(productId);
+            return GetArticleImgByProductIdRes;
+        } catch (Exception exception) {
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
+
     // 판매 글 검색(title)
     public List<GetArticleRes> searchArticlesByTitle() throws BaseException {
         try {

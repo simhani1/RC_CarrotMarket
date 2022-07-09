@@ -10,6 +10,11 @@ import lombok.Setter;
 
 public class GetArticleRes {
 
+    // 판매 글 모든 사진 조회(Get)
+    public GetArticleRes(String productImgUrl){
+        this.productImgUrl = productImgUrl;
+    }
+
     // 전체 판매 글 목록 조회(홈화면) & 특정 유저의 판매 글 검색 & 판매 글 검색(title)
     public GetArticleRes(String productImgUrl, String title, String address, String updatedAt, int chatRoomCnt, int heartCnt, String price) {
         this.productImgUrl = productImgUrl;
@@ -22,7 +27,7 @@ public class GetArticleRes {
     }
 
     // 특정 유저의 숨김 글 전체 조회
-    public GetArticleRes(String productImgUrl, String title, String address, String updatedAt, int condition, int chatRoomCnt, int heartCnt, String price) {
+    public GetArticleRes(String productImgUrl, String title, String address, String updatedAt, String condition, int chatRoomCnt, int heartCnt, String price) {
         this.productImgUrl = productImgUrl;
         this.title = title;
         this.address = address;
@@ -34,8 +39,7 @@ public class GetArticleRes {
     }
 
     // 판매 글 조회(판매 글 메인화면)
-    public GetArticleRes(String productImgUrl, String nickname, String profileImgUrl, double mannerTemp, int condition, String title, String address, String categoryName, String updatedAt, String contents, int chatRoomCnt, int heartCnt, String price, String negotiation) {
-        this.productImgUrl = productImgUrl;
+    public GetArticleRes(String nickname, String profileImgUrl, double mannerTemp, String condition, String title, String address, String categoryName, String updatedAt, String contents, int chatRoomCnt, int heartCnt, String price, String negotiation) {
         this.nickname = nickname;
         this.profileImgUrl = profileImgUrl;
         this.mannerTemp = mannerTemp;
@@ -58,7 +62,7 @@ public class GetArticleRes {
     private String title;
     private String address;
     private String categoryName;
-    private int condition;
+    private String condition;
     private int updatedCnt;
     private String updatedAt;
     private String contents;
