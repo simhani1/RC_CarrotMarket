@@ -1,11 +1,16 @@
 package com.example.demo.src.chat;
 
+import com.example.demo.config.BaseException;
+import com.example.demo.src.chat.model.PatchChatReq;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.example.demo.config.BaseResponseStatus.DATABASE_ERROR;
+import static com.example.demo.config.BaseResponseStatus.REMOVE_FAIL_CHATROOM;
 
 @Service
 @Transactional
@@ -49,19 +54,19 @@ public class ChatService {
 //        }
 //    }
 //
-//    //////////////////////////////////////  PATCH
-//
-//    // 판매 글 삭제 (Patch)
-//    public void removeProduct(PatchProductReq removeProductReq) throws BaseException {
-//        try {
-//            int result = productDao.removeProduct(removeProductReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
-//            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메세지를 보냅니다.
-//                throw new BaseException(REMOVE_FAIL_PRODUCT);
-//            }
-//        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
-//            throw new BaseException(DATABASE_ERROR);
-//        }
-//    }
+    //////////////////////////////////////  PATCH
+
+    // 채팅방 삭제 (Patch)
+    public void removeChatRoom(PatchChatReq removeChatRoomReq) throws BaseException {
+        try {
+            int result = chatDao.removeChatRoom(removeChatRoomReq); // 해당 과정이 무사히 수행되면 True(1), 그렇지 않으면 False(0)입니다.
+            if (result == 0) { // result값이 0이면 과정이 실패한 것이므로 에러 메세지를 보냅니다.
+                throw new BaseException(REMOVE_FAIL_CHATROOM);
+            }
+        } catch (Exception exception) { // DB에 이상이 있는 경우 에러 메시지를 보냅니다.
+            throw new BaseException(DATABASE_ERROR);
+        }
+    }
 //
 //    // 끌어올리기 (Patch)
 //    public void updateProduct(PatchProductReq updateProductReq) throws BaseException {

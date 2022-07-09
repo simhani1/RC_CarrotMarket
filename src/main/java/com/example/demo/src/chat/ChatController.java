@@ -3,6 +3,7 @@ package com.example.demo.src.chat;
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
 import com.example.demo.src.chat.model.GetChatRes;
+import com.example.demo.src.chat.model.PatchChatReq;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,34 +152,32 @@ public class ChatController {
     }
 
     //////////////////////////////////////  PATCH
-//
-//    /**
-//     * 판매 글 삭제 API
-//     * [PATCH] /status/:productId
-//     */
-//    @ResponseBody
-//    @PatchMapping("/status/delete/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:productId
-//    public BaseResponse<String> removeProduct(@PathVariable("productId") int productId) {
-//        try {
-///*
-//  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-//            //jwt에서 idx 추출.
-//            int productIdByJwt = jwtService.getProductIdx();
-//            //productId와 접근한 유저가 같은지 확인
-//            if(productId != productIdByJwt){
-//                return new BaseResponse<>(INVALID_USER_JWT);
-//            }
-//            //같다면 유저네임 변경
-//  **************************************************************************
-// */
-//            PatchProductReq removeProductReq = new PatchProductReq(productId);
-//            productService.removeProduct(removeProductReq);
-//            String result = "글이 삭제되었습니다.";
-//            return new BaseResponse<>(result);
-//        } catch (BaseException exception) {
-//            return new BaseResponse<>((exception.getStatus()));
-//        }
-//    }
+
+    /**
+     * 채팅 방 삭제 API
+     * [PATCH] /delete/:userId/:chatRoomId
+     */
+    @ResponseBody
+    @PatchMapping("/delete/{userId}/{chatRoomId}") // (PATCH) http://simhani1.shop:9000/app/chat/delete/:userId/:chatRoomId
+    public BaseResponse<String> removeProduct(@PathVariable("userId") int userId, @PathVariable("chatRoomId") int chatRoomId) {
+        try {
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
+                return new BaseResponse<>(INVALID_USER_JWT);
+            }
+            //////////////////////////////////////  JWT
+            PatchChatReq removeChatRoomReq = new PatchChatReq(userId, chatRoomId);
+            chatService.removeChatRoom(removeChatRoomReq);
+            String result = "채팅방이 삭제되었습니다.";
+            return new BaseResponse<>(result);
+        } catch (BaseException exception) {
+            return new BaseResponse<>((exception.getStatus()));
+        }
+    }
 //
 //    /**
 //     * 끌어올리기 API

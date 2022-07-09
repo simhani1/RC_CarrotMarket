@@ -68,7 +68,10 @@ public enum BaseResponseStatus {
     MODIFY_FAIL_TITLE(false, 4200, "제목 수정에 실패하였습니다."),
     MODIFY_FAIL_PRICE(false, 4201, "가격 수정에 실패하였습니다."),
     MODIFY_FAIL_NEGOTIATION(false, 4202, "가격제안 변경에 실패하였습니다."),
-    MODIFY_FAIL_CONDITION(false, 4202, "상태 변경에 실패하였습니다.");
+    MODIFY_FAIL_CONDITION(false, 4202, "상태 변경에 실패하였습니다."),
+
+    // [PATCH] /chat/delete/{userId}/{chatRoomId}
+    REMOVE_FAIL_CHATROOM(false, 4300, "채팅방 삭제에 실패하였습니다.");
 
     // 5000 : 필요시 만들어서 쓰세요
     // 6000 : 필요시 만들어서 쓰세요

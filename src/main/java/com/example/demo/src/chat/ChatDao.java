@@ -1,6 +1,7 @@
 package com.example.demo.src.chat;
 
 import com.example.demo.src.chat.model.GetChatRes;
+import com.example.demo.src.chat.model.PatchChatReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -47,16 +48,16 @@ public class ChatDao {
 //        return this.jdbcTemplate.queryForObject(lastInsertIdQuery, int.class); // 해당 쿼리문의 결과 마지막으로 삽인된 판매 글의 productId를 반환한다.
 //    }
 //
-//    //////////////////////////////////////  PATCH
-//
-//    // 판매 글 삭제 (Patch)
-//    public int removeProduct(PatchProductReq patchProductReq) {
-//        String removeProductQuery = "UPDATE RC_CarrotMarket.Product\n" +
-//                "SET `\bstatus` = 'Y'\n" +
-//                "WHERE productId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
-//        int removeProductParams = patchProductReq.getProductId(); // 주입될 값들(nickname, userId) 순
-//        return this.jdbcTemplate.update(removeProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
-//    }
+    //////////////////////////////////////  PATCH
+
+    // 채팅방 삭제 (Patch)
+    public int removeChatRoom(PatchChatReq removeChatRoomReq) {
+        String removeChatRoomQuery = "update ChattingRoom\n" +
+                "set `\bstatus` = 'Y'\n" +
+                "where `\bstatus` = 'N' and chatRoomId = ? and (senderId = ? or recieverId = ?)";
+        Object[] removeChatRoomParams = new Object[]{removeChatRoomReq.getChatRoomId(), removeChatRoomReq.getUserId(), removeChatRoomReq.getUserId()};
+        return this.jdbcTemplate.update(removeChatRoomQuery, removeChatRoomParams);
+    }
 //
 //    // 끌어올리기 (Patch)
 //    public int updateProduct(PatchProductReq updateProductReq) {
@@ -139,7 +140,7 @@ public class ChatDao {
                 "    ProductImg.productImgUrl as 'productImgUrl'\n" +
                 "from ChattingRoom\n" +
                 "inner join ProductImg on ChattingRoom.productId = ProductImg.productId and ProductImg.mainImg = true\n" +
-                "where ChattingRoom.recieverId = ? or ChattingRoom.senderId = ? \n" +
+                "where ChattingRoom.recieverId = ? or ChattingRoom.senderId = ? and ChattingRoom.`\bstatus` = 'N'\n" +
                 "order by createdAt";
         Object[] getChatRoomsParams = new Object[]{userId, userId};
         return this.jdbcTemplate.query(getChatRoomsQuery,
