@@ -7,6 +7,7 @@ import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ import static com.example.demo.utils.ValidationRegex.isRegexTelephoneNum;
  * Controller란?
  * 사용자의 Request를 전달받아 요청의 처리를 담당하는 Service, Prodiver 를 호출
  */
+@Transactional
 public class UserController {
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
 

@@ -4,6 +4,7 @@ import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
  * 데이터베이스 관련 작업을 전담하는 클래스
  * 데이터베이스에 연결하여, 입력 , 수정, 삭제, 조회 등의 작업을 수행
  */
+@Transactional
 public class UserDao {
 
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************

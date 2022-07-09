@@ -4,12 +4,13 @@ import com.example.demo.src.chat.model.GetChatRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 @Repository
-
+@Transactional
 public class ChatDao {
 
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
