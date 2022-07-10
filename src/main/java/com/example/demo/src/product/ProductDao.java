@@ -1,9 +1,7 @@
 package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.product.model.GetArticleRes;
-import com.example.demo.src.product.model.PatchProductReq;
-import com.example.demo.src.product.model.PostProductReq;
+import com.example.demo.src.product.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -131,7 +129,7 @@ public class ProductDao {
     //////////////////////////////////////  GET
 
     // 전체 판매 글 목록 조회(홈화면) (Get)
-    public List<GetArticleRes> getArticles() {
+    public List<GetArticleByUserIdRes> getArticles() {
         String getArticlesQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
                 "    Product.title as 'title',\n" +
@@ -153,7 +151,7 @@ public class ProductDao {
                 "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and ProductImg.mainImg = true\n" +
                 "order by Product.updatedAt desc";
         return this.jdbcTemplate.query(getArticlesQuery,
-                (rs, rowNum) -> new GetArticleRes (
+                (rs, rowNum) -> new GetArticleByUserIdRes (
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
                         rs.getString("address"),
@@ -165,7 +163,7 @@ public class ProductDao {
     }
 
     // 특정 유저의 판매 글 조회(nickname) (Get)
-    public List<GetArticleRes> getArticlesByNickname(String nickname) {
+    public List<GetArticleByUserIdRes> getArticlesByNickname(String nickname) {
         String getArticlesByNicknameQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
                 "    Product.title as 'title',\n" +
@@ -188,7 +186,7 @@ public class ProductDao {
                 "order by Product.updatedAt desc";
         String getArticlesByNicknameParams = nickname;
         return this.jdbcTemplate.query(getArticlesByNicknameQuery,
-                (rs, rowNum) -> new GetArticleRes(
+                (rs, rowNum) -> new GetArticleByUserIdRes(
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
                         rs.getString("address"),
@@ -250,14 +248,14 @@ public class ProductDao {
     }
 
     // 판매 글의 모든 사진 조회(Get)
-    public List<GetArticleRes> getArticleImgByProductId(int productId) {
+    public List<GetProductImgRes> getArticleImgByProductId(int productId) {
         String getArticleImgByProductIdQuery = "select productImgUrl\n" +
                 "from ProductImg\n" +
                 "inner join Product on Product.productId = ProductImg.productId\n" +
                 "where ProductImg.productId = ? and Product.`\bstatus` = 'N'";
         int getArticleImgByProductIdParams = productId;
         return this.jdbcTemplate.query(getArticleImgByProductIdQuery,
-                (rs, rowNum) -> new GetArticleRes(
+                (rs, rowNum) -> new GetProductImgRes(
                         rs.getString("productImgUrl")),
                 getArticleImgByProductIdParams);
     }
@@ -297,7 +295,7 @@ public class ProductDao {
     }
 
     // 특정 유저(본인)의 숨김 내역 조회(userId) (Get)
-    public List<GetArticleRes> getHidedArticlesRes(int userId) {
+    public List<GetHidedArticleRes> getHidedArticlesRes(int userId) {
         String getHidedArticlesByuserIdQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
                 "    Product.title as 'title',\n" +
@@ -321,7 +319,7 @@ public class ProductDao {
                 "order by Product.updatedAt desc";
         int getHidedArticlesByuserIdParams = userId;
         return this.jdbcTemplate.query(getHidedArticlesByuserIdQuery,
-                (rs, rowNum) -> new GetArticleRes(
+                (rs, rowNum) -> new GetHidedArticleRes(
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
                         rs.getString("address"),

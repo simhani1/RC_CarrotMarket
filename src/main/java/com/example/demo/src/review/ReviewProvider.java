@@ -1,7 +1,7 @@
 package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.review.model.GetReviewRes;
+import com.example.demo.src.review.model.GetReviewByUserIdRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,10 +79,10 @@ public class ReviewProvider {
     //////////////////////////////////////  GET
 
     // 특정 유저가 받은 거래후기 조회 (Get)
-    public List<GetReviewRes> getReviews(int userId) throws BaseException {
+    public List<GetReviewByUserIdRes> GetReviewByUserIdRes(int userId) throws BaseException {
         try {
-            List<GetReviewRes> GetReviewsRes = reviewDao.getReviews(userId);
-            return GetReviewsRes;
+            List<GetReviewByUserIdRes> GetReviewByUserIdRes = reviewDao.getReviews(userId);
+            return GetReviewByUserIdRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

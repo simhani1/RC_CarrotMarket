@@ -86,7 +86,7 @@ public class UserDao {
 
     // 닉네임 변경
     public int modifyUserName(PatchUserReq patchUserReq) {
-        String modifyUserNameQuery = "update User set nickname = ? where userId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
+        String modifyUserNameQuery = "update User set nickname = ? where userId = ? and status = 'A'"; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
         Object[] modifyUserNameParams = new Object[]{patchUserReq.getNickname(), patchUserReq.getUserId()}; // 주입될 값들(nickname, userId) 순
 
         return this.jdbcTemplate.update(modifyUserNameQuery, modifyUserNameParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
@@ -134,19 +134,22 @@ public class UserDao {
         ); // 복수개의 회원정보들을 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보)의 결과 반환(동적쿼리가 아니므로 Parmas부분이 없음)
     }
 
-    // 해당 nickname을 갖는 유저들의 정보 조회
+    // 해당 nickname을 갖는 유저 검색
     public List<GetUserRes> getUsersByNickname(String nickname) {
-        String getUsersByNicknameQuery = "select * from User where nickname =?"; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
+        String getUsersByNicknameQuery = "select\n" +
+                "    profileImgUrl as 'profileImgUrl',\n" +
+                "    nickname as 'nickname',\n" +
+                "    userId as 'userId',\n" +
+                "    address as 'address'\n" +
+                "from User\n" +
+                "where nickname regexp ? "; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
         String getUsersByNicknameParams = nickname;
         return this.jdbcTemplate.query(getUsersByNicknameQuery,
                 (rs, rowNum) -> new GetUserRes(
-                        rs.getInt("userId"),
+                        rs.getString("profileImgUrl"),
                         rs.getString("nickname"),
-                        rs.getString("telephoneNum"),
-                        rs.getString("address"),
-                        rs.getString("pwd"),
-                        rs.getString("status"),
-                        rs.getString("updatedAt")),
+                        rs.getInt("userId"),
+                        rs.getString("address")),
                 getUsersByNicknameParams); // 해당 닉네임을 갖는 모든 User 정보를 얻기 위해 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 

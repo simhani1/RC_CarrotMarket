@@ -89,14 +89,14 @@ public class ProductController {
      */
     @ResponseBody
     @GetMapping("") // (GET) http://simhani1.shop:9000/app/product
-    public BaseResponse<List<GetArticleRes>> getArticles(@RequestParam(required = false) String nickname) {
+    public BaseResponse<List<GetArticleByUserIdRes>> getArticles(@RequestParam(required = false) String nickname) {
         try {
             if (nickname == null) {
-                List<GetArticleRes> GetArticlesRes = productProvider.getArticles();
+                List<GetArticleByUserIdRes> GetArticlesRes = productProvider.getArticles();
                 return new BaseResponse<>(GetArticlesRes);
             }
             // query string인 nickname이 있을 경우, 조건을 만족하는 유저정보들을 불러온다.
-            List<GetArticleRes> GetUserArticlesByNicknameRes = productProvider.getArticlesByNickname(nickname);
+            List<GetArticleByUserIdRes> GetUserArticlesByNicknameRes = productProvider.getArticlesByNickname(nickname);
             return new BaseResponse<>(GetUserArticlesByNicknameRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -124,9 +124,9 @@ public class ProductController {
      */
     @ResponseBody
     @GetMapping("/detail/img/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/img/:productId
-    public BaseResponse<List<GetArticleRes>> getArticleImgByProductId(@PathVariable("productId") int productId) {
+    public BaseResponse<List<GetProductImgRes>> getArticleImgByProductId(@PathVariable("productId") int productId) {
         try {
-            List<GetArticleRes> getArticleImgByProductIdRes = productProvider.getArticleImgByProductId(productId);
+            List<GetProductImgRes> getArticleImgByProductIdRes = productProvider.getArticleImgByProductId(productId);
             return new BaseResponse<>(getArticleImgByProductIdRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -157,7 +157,7 @@ public class ProductController {
      */
     @ResponseBody
     @GetMapping("/hide/{userId}") // (GET) http://simhani1.shop:9000/app/product/hide/:userId
-    public BaseResponse<List<GetArticleRes>> getHidedArticles(@PathVariable int userId) {
+    public BaseResponse<List<GetHidedArticleRes>> getHidedArticles(@PathVariable int userId) {
         try {
             // 해당 회원이 맞는지 검사
             //////////////////////////////////////  JWT
@@ -168,7 +168,7 @@ public class ProductController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //////////////////////////////////////  JWT
-            List<GetArticleRes> GetHidedArticlesRes = productProvider.getHidedArticlesRes(userId);
+            List<GetHidedArticleRes> GetHidedArticlesRes = productProvider.getHidedArticlesRes(userId);
             return new BaseResponse<>(GetHidedArticlesRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -250,7 +250,7 @@ public class ProductController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //////////////////////////////////////  JWT
-            if(product.getTitle().equals(null)) {
+            if(product.getTitle().equals("")) {
                 return new BaseResponse<>(EMPTY_TITLE);
             }
             PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getTitle(), "title");
@@ -308,7 +308,7 @@ public class ProductController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //////////////////////////////////////  JWT
-            if(product.getContents().equals(null)) {
+            if(product.getContents().equals("")) {
                 return new BaseResponse<>(EMPTY_CONTENTS);
             }
             PatchProductReq patchProductReq = new PatchProductReq(userId, productId, product.getContents(), "contents");
@@ -345,7 +345,7 @@ public class ProductController {
                 result = "가격제안이 수정되었습니다.";
             }
             else{
-                return new BaseResponse<>(REQUEST_ERROR);
+                return new BaseResponse<>(INVALID_NEGOTIATION);
             }
             return new BaseResponse<>(result);
         } catch (BaseException exception) {
@@ -374,8 +374,14 @@ public class ProductController {
             productService.changeCondition(patchProductReq);
             String result;
             // F(판매 완료), S(판매중), R(예약중) 만 입력되도록 검사
-            if(product.getCondition().equals("F") || product.getCondition().equals("S") || product.getCondition().equals("R")) {
-                result = "물건 상태가 변경되었습니다.";
+            if(product.getCondition().equals("F")) {
+                result = "판매완료로 변경되었습니다.";
+            }
+            else if(product.getCondition().equals("S")){
+                result = "판매중으로 변경되었습니다.";
+            }
+            else if(product.getCondition().equals("R")){
+                result = "예약중으로 변경되었습니다.";
             }
             else{
                 return new BaseResponse<>(REQUEST_ERROR);

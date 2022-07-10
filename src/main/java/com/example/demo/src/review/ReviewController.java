@@ -2,7 +2,7 @@ package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.BaseResponse;
-import com.example.demo.src.review.model.GetReviewRes;
+import com.example.demo.src.review.model.GetReviewByUserIdRes;
 import com.example.demo.src.review.model.PostReviewReq;
 import com.example.demo.src.review.model.PostReviewRes;
 import com.example.demo.utils.JwtService;
@@ -106,7 +106,7 @@ public class ReviewController {
      */
     @ResponseBody
     @GetMapping("/{userId}") // (GET) http://simhani1.shop:9000/app/reviews/:userId
-    public BaseResponse<List<GetReviewRes>> getReview(@PathVariable("userId") int userId) {
+    public BaseResponse<List<GetReviewByUserIdRes>> GetReviewByUserIdRes(@PathVariable("userId") int userId) {
         try {
             // 해당 회원이 맞는지 검사
             //////////////////////////////////////  JWT
@@ -117,8 +117,8 @@ public class ReviewController {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
             //////////////////////////////////////  JWT
-            List<GetReviewRes> getReviewRes = reviewProvider.getReviews(userId);
-            return new BaseResponse<>(getReviewRes);
+            List<GetReviewByUserIdRes> GetReviewByUserIdRes = reviewProvider.GetReviewByUserIdRes(userId);
+            return new BaseResponse<>(GetReviewByUserIdRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

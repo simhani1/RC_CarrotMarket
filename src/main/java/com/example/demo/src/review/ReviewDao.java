@@ -1,7 +1,7 @@
 package com.example.demo.src.review;
 
 import com.example.demo.config.BaseException;
-import com.example.demo.src.review.model.GetReviewRes;
+import com.example.demo.src.review.model.GetReviewByUserIdRes;
 import com.example.demo.src.review.model.PostReviewReq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -105,7 +105,7 @@ public class ReviewDao {
     //////////////////////////////////////  GET
 
     // 특정 유저가 받은 거래후기 조회 (Get)
-    public List<GetReviewRes> getReviews(int userId) {
+    public List<GetReviewByUserIdRes> getReviews(int userId) {
         String getReviewsQuery = "select\n" +
                 "    User.profileImgUrl as 'profileImgUrl',\n" +
                 "    User.nickname as 'nickname',\n" +
@@ -120,13 +120,13 @@ public class ReviewDao {
                 "           end as 'updatedAt',\n" +
                 "    PurchaseReview.reviewContents as 'reviewContents'\n" +
                 "from PurchaseReview\n" +
-                "inner join Product on PurchaseReview.productId = Product.productid\n" +
+                "inner join Product on PurchaseReview.productId = Product.productid and User.status = 'A'\n" +
                 "inner join User on PurchaseReview.buyerId = User.userId\n" +
                 "where PurchaseReview.productId = Product.productId and Product.userId = ?\n" +
                 "order by PurchaseReview.updatedAt desc";
         int getReviewsParams = userId;
         return this.jdbcTemplate.query(getReviewsQuery,
-                (rs, rowNum) -> new GetReviewRes(
+                (rs, rowNum) -> new GetReviewByUserIdRes(
                         rs.getString("profileImgUrl"),
                         rs.getString("nickname"),
                         rs.getString("address"),

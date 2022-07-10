@@ -1,7 +1,10 @@
 package com.example.demo.src.product;
 
 import com.example.demo.config.BaseException;
+import com.example.demo.src.product.model.GetArticleByUserIdRes;
 import com.example.demo.src.product.model.GetArticleRes;
+import com.example.demo.src.product.model.GetHidedArticleRes;
+import com.example.demo.src.product.model.GetProductImgRes;
 import com.example.demo.utils.JwtService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,9 +59,9 @@ public class ProductProvider {
     //////////////////////////////////////  GET
 
     // 전체 판매 글 목록 조회(홈화면)
-    public List<GetArticleRes> getArticles() throws BaseException {
+    public List<GetArticleByUserIdRes> getArticles() throws BaseException {
         try {
-            List<GetArticleRes> GetArticlesRes = productDao.getArticles();
+            List<GetArticleByUserIdRes> GetArticlesRes = productDao.getArticles();
             return GetArticlesRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -66,9 +69,9 @@ public class ProductProvider {
     }
 
     // 특정 유저의 판매 글 검색
-    public List<GetArticleRes> getArticlesByNickname(String nickname) throws BaseException {
+    public List<GetArticleByUserIdRes> getArticlesByNickname(String nickname) throws BaseException {
         try {
-            List<GetArticleRes> GetArticlesByNicknameRes = productDao.getArticlesByNickname(nickname);
+            List<GetArticleByUserIdRes> GetArticlesByNicknameRes = productDao.getArticlesByNickname(nickname);
             return GetArticlesByNicknameRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -86,9 +89,9 @@ public class ProductProvider {
     }
 
     // 판매 글의 모든 사진 조회(메인화면)
-    public List<GetArticleRes> getArticleImgByProductId(int productId) throws BaseException {
+    public List<GetProductImgRes> getArticleImgByProductId(int productId) throws BaseException {
         try {
-            List<GetArticleRes> GetArticleImgByProductIdRes = productDao.getArticleImgByProductId(productId);
+            List<GetProductImgRes> GetArticleImgByProductIdRes = productDao.getArticleImgByProductId(productId);
             return GetArticleImgByProductIdRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
@@ -106,9 +109,9 @@ public class ProductProvider {
     }
 
     // 특정 유저의 숨김 글 전체 조회(userId)
-    public List<GetArticleRes> getHidedArticlesRes(int userId) throws BaseException {
+    public List<GetHidedArticleRes> getHidedArticlesRes(int userId) throws BaseException {
         try {
-            List<GetArticleRes> GetHidedArticlesRes = productDao.getHidedArticlesRes(userId);
+            List<GetHidedArticleRes> GetHidedArticlesRes = productDao.getHidedArticlesRes(userId);
             return GetHidedArticlesRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);

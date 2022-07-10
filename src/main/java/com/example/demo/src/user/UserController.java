@@ -109,7 +109,7 @@ public class UserController {
      * 모든 회원들의  조회 API
      * [GET] /users
      *
-     * 해당 닉네임을 같는 유저들의 정보 조회 API
+     * 해당 nickname을 갖는 유저 검색
      * [GET] /users? NickName=
      */
     //Query String
@@ -228,7 +228,7 @@ public class UserController {
     //////////////////////////////////////  PATCH
 
     /**
-     * 유저 닉네임 변경 API
+     * 유저  API
      * [PATCH] /users/:userId
      *
      */
