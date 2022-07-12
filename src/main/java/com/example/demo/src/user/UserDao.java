@@ -1,10 +1,11 @@
 package com.example.demo.src.user;
 
+import com.example.demo.src.product.model.GetUserByIdRes;
+import com.example.demo.src.product.model.GetUserProfileByIdRes;
 import com.example.demo.src.user.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
@@ -16,7 +17,6 @@ import java.util.List;
  * 데이터베이스 관련 작업을 전담하는 클래스
  * 데이터베이스에 연결하여, 입력 , 수정, 삭제, 조회 등의 작업을 수행
  */
-@Transactional
 public class UserDao {
 
     // *********************** 동작에 있어 필요한 요소들을 불러옵니다. *************************
@@ -119,11 +119,19 @@ public class UserDao {
 
     //////////////////////////////////////  GET
 
-    // 원전체 회원정보 조회
-    public List<GetUserRes> getUsers() {
-        String getUsersQuery = "select * from User"; //User 테이블에 존재하는 모든 회원들의 정보를 조회하는 쿼리
-        return this.jdbcTemplate.query(getUsersQuery,
-                (rs, rowNum) -> new GetUserRes(
+    // 전체 회원정보 조회
+    public List<GetAllUsersRes> getAllUsers() {
+        String getAllUsersQuery = "select\n" +
+                "    userId as 'userId',\n" +
+                "    nickname as 'nickname',\n" +
+                "    telephoneNum as 'telephoneNum',\n" +
+                "    address as 'address',\n" +
+                "    pwd as 'pwd',\n" +
+                "    status as 'status',\n" +
+                "    updatedAt as 'updatedAt'\n" +
+                "from User"; //User 테이블에 존재하는 모든 회원들의 정보를 조회하는 쿼리
+        return this.jdbcTemplate.query(getAllUsersQuery,
+                (rs, rowNum) -> new GetAllUsersRes(
                         rs.getInt("userId"),
                         rs.getString("nickname"),
                         rs.getString("telephoneNum"),
@@ -135,17 +143,17 @@ public class UserDao {
     }
 
     // 해당 nickname을 갖는 유저 검색
-    public List<GetUserRes> getUsersByNickname(String nickname) {
+    public List<GetUsersByNickname> getUsersByNickname(String nickname) {
         String getUsersByNicknameQuery = "select\n" +
                 "    profileImgUrl as 'profileImgUrl',\n" +
                 "    nickname as 'nickname',\n" +
                 "    userId as 'userId',\n" +
                 "    address as 'address'\n" +
                 "from User\n" +
-                "where nickname regexp ? "; // 해당 이메일을 만족하는 유저를 조회하는 쿼리문
-        String getUsersByNicknameParams = nickname;
+                "where nickname like ? and status = 'A'";
+        String getUsersByNicknameParams = '%' + nickname + '%';
         return this.jdbcTemplate.query(getUsersByNicknameQuery,
-                (rs, rowNum) -> new GetUserRes(
+                (rs, rowNum) -> new GetUsersByNickname(
                         rs.getString("profileImgUrl"),
                         rs.getString("nickname"),
                         rs.getInt("userId"),
@@ -154,11 +162,11 @@ public class UserDao {
     }
 
     // 해당 userId를 갖는 유저조회
-    public GetUserRes getUser(int userId) {
-        String getUserQuery = "select * from User where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
-        int getUserParams = userId;
-        return this.jdbcTemplate.queryForObject(getUserQuery,
-                (rs, rowNum) -> new GetUserRes(
+    public GetUserByIdRes getUserById(int userId) {
+        String getUserByIdQuery = "select * from User where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
+        int getUserByIdParams = userId;
+        return this.jdbcTemplate.queryForObject(getUserByIdQuery,
+                (rs, rowNum) -> new GetUserByIdRes(
                         rs.getInt("userId"),
                         rs.getString("nickname"),
                         rs.getString("telephoneNum"),
@@ -166,32 +174,37 @@ public class UserDao {
                         rs.getString("pwd"),
                         rs.getString("status"),
                         rs.getString("updatedAt")),
-                getUserParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+                getUserByIdParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
     // 해당 userId를 갖는 유저 프로필 조회
-    public GetUserRes getUserProfile(int userId) {
-        String getUserProfileQuery = "select * from User where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
-        int getUserProfileParams = userId;
-        return this.jdbcTemplate.queryForObject(getUserProfileQuery,
-                (rs, rowNum) -> new GetUserRes(
+    public GetUserProfileByIdRes getUserProfileById(int userId) {
+        String getUserProfileByIdResQuery = "select * from User where userId = ?"; // 해당 userId를 만족하는 유저를 조회하는 쿼리문
+        int getUserProfileByIdParams = userId;
+        return this.jdbcTemplate.queryForObject(getUserProfileByIdResQuery,
+                (rs, rowNum) -> new GetUserProfileByIdRes(
                         rs.getString("profileImgUrl"),
                         rs.getString("nickname"),
                         rs.getString("address"),
                         rs.getDouble("mannerTemp"),
                         rs.getInt("hopeRate"),
                         rs.getInt("responseRate")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-                getUserProfileParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+                getUserProfileByIdParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
     // 해당 userId를 갖는 유저의 획득 뱃지 조회
     public List<GetUserBadgeRes> getUserBadges(int userId) {
-        String getUserBadgesQuery = "select BadgeCategory.badgeName as 'badgeName', BadgeCategory.badgeImgUrl as 'badgeImgUrl' from Badge inner join BadgeCategory on Badge.badgeId = BadgeCategory.badgeId where Badge.userId = ?";
+        String getUserBadgesQuery = "select\n" +
+                "    BadgeCategory.badgeImgUrl as 'badgeImgUrl',\n" +
+                "    BadgeCategory.badgeName as 'badgeName'\n" +
+                "from Badge\n" +
+                "inner join BadgeCategory on Badge.badgeId = BadgeCategory.badgeId\n" +
+                "where userId = ?";
         int getUserProfileParams = userId;
         return this.jdbcTemplate.query(getUserBadgesQuery,
                 (rs, rowNum) -> new GetUserBadgeRes(
-                        rs.getString("badgeName"),
-                        rs.getString("badgeImgUrl")),
+                        rs.getString("badgeImgUrl"),
+                        rs.getString("badgeName")),
                 getUserProfileParams);
     }
 }

@@ -2,6 +2,8 @@ package com.example.demo.src.user;
 
 import com.example.demo.config.BaseException;
 import com.example.demo.config.secret.Secret;
+import com.example.demo.src.product.model.GetUserByIdRes;
+import com.example.demo.src.product.model.GetUserProfileByIdRes;
 import com.example.demo.src.user.model.*;
 import com.example.demo.utils.AES128;
 import com.example.demo.utils.JwtService;
@@ -9,9 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 import static com.example.demo.config.BaseResponseStatus.*;
 
 //Provider : Read의 비즈니스 로직 처리
@@ -23,7 +25,6 @@ import static com.example.demo.config.BaseResponseStatus.*;
  * 요청한 작업을 처리하는 관정을 하나의 작업으로 묶음
  * dao를 호출하여 DB CRUD를 처리 후 Controller로 반환
  */
-@Transactional
 public class UserProvider {
 
 
@@ -79,21 +80,21 @@ public class UserProvider {
 
     //////////////////////////////////////  GET
 
-    // User들의 정보를 조회
-    public List<GetUserRes> getUsers() throws BaseException {
+    // 전체 User들의 정보를 조회
+    public List<GetAllUsersRes> getAllUsers() throws BaseException {
         try {
-            List<GetUserRes> getUserRes = userDao.getUsers();
-            return getUserRes;
+            List<GetAllUsersRes> getAllUsersRes = userDao.getAllUsers();
+            return getAllUsersRes;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     // 해당 nickname을 갖는 유저 검색
-    public List<GetUserRes> getUsersByNickname(String nickname) throws BaseException {
+    public List<GetUsersByNickname> getUsersByNickname(String nickname) throws BaseException {
         try {
-            List<GetUserRes> getUserRes = userDao.getUsersByNickname(nickname);
-            return getUserRes;
+            List<GetUsersByNickname> getUsersByNickname = userDao.getUsersByNickname(nickname);
+            return getUsersByNickname;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
@@ -101,20 +102,20 @@ public class UserProvider {
 
 
     // 해당 userId를 갖는 User의 정보 조회
-    public GetUserRes getUser(int userId) throws BaseException {
+    public GetUserByIdRes getUserById(int userId) throws BaseException {
         try {
-            GetUserRes getUserRes = userDao.getUser(userId);
-            return getUserRes;
+            GetUserByIdRes getUserById = userDao.getUserById(userId);
+            return getUserById;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }
     }
 
     // 해당 userId를 갖는 User의 프로필 조회
-    public GetUserRes getUserProfile(int userId) throws BaseException {
+    public GetUserProfileByIdRes getUserProfileById(int userId) throws BaseException {
         try {
-            GetUserRes getUserRes = userDao.getUserProfile(userId);
-            return getUserRes;
+            GetUserProfileByIdRes getUserProfileById = userDao.getUserProfileById(userId);
+            return getUserProfileById;
         } catch (Exception exception) {
             throw new BaseException(DATABASE_ERROR);
         }

@@ -27,7 +27,7 @@ public enum BaseResponseStatus {
 
     // [POST] /user
     POST_USERS_EMPTY_PHONENUMBER (false, 2015, "휴대폰 번호를을 입력해주세요."),
-    POST_USERS_INVALID_PHONENUMBER(false, 2016, "휴대폰 번호 형식을 확인해주세요."),
+    POST_USERS_INVALID_PHONENUMBER(false, 2016, "휴대폰 번호 양식을 확인해주세요.(010********)"),
     POST_USERS_EXISTS_EMAIL(false,2017,"중복된 이메일입니다."),
     EMPTY_TITLE(false, 2018, "제목을 입력하세요."),
     INVALID_PRICE(false, 2019, "올바른 가격을 입력하세요."),
