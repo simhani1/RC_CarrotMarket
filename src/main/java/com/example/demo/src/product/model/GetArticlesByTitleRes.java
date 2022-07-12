@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter // 해당 클래스에 대한 설정자 생성
 @AllArgsConstructor // 해당 클래스의 모든 멤버 변수를 받는 생성자를 생성
 
-public class GetArticleByUserIdRes {
+public class GetArticlesByTitleRes {
     private String productImgUrl;
     private String title;
     private String address;

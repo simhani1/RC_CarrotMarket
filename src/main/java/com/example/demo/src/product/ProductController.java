@@ -89,14 +89,14 @@ public class ProductController {
      */
     @ResponseBody
     @GetMapping("") // (GET) http://simhani1.shop:9000/app/product
-    public BaseResponse<List<GetArticleByUserIdRes>> getArticles(@RequestParam(required = false) String nickname) {
+    public BaseResponse<List<GetArticleByUserNicknameRes>> getArticles(@RequestParam(required = false) String nickname) {
         try {
             if (nickname == null) {
-                List<GetArticleByUserIdRes> GetArticlesRes = productProvider.getArticles();
+                List<GetArticleByUserNicknameRes> GetArticlesRes = productProvider.getArticles();
                 return new BaseResponse<>(GetArticlesRes);
             }
             // query string인 nickname이 있을 경우, 조건을 만족하는 유저정보들을 불러온다.
-            List<GetArticleByUserIdRes> GetUserArticlesByNicknameRes = productProvider.getArticlesByNickname(nickname);
+            List<GetArticleByUserNicknameRes> GetUserArticlesByNicknameRes = productProvider.getArticlesByNickname(nickname);
             return new BaseResponse<>(GetUserArticlesByNicknameRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
@@ -109,10 +109,10 @@ public class ProductController {
      */
     @ResponseBody
     @GetMapping("/detail/info/{productId}") // (GET) http://simhani1.shop:9000/app/product/detail/info/:productId
-    public BaseResponse<GetArticleRes> getArticleByProductId(@PathVariable("productId") int productId) {
+    public BaseResponse<GetMainArticleRes> getArticleByProductId(@PathVariable("productId") int productId) {
         try {
-            GetArticleRes getArticleByProductIdRes = productProvider.getArticleByProductId(productId);
-            return new BaseResponse<>(getArticleByProductIdRes);
+            GetMainArticleRes getArticleByProductId = productProvider.getArticleByProductId(productId);
+            return new BaseResponse<>(getArticleByProductId);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }
@@ -139,11 +139,11 @@ public class ProductController {
      */
     //Query String
     @ResponseBody
-    @GetMapping("?title") // (GET) http://simhani1.shop:9000/app/product?title=
-    public BaseResponse<List<GetArticleRes>> searchArticlesByTitle() {
+    @GetMapping("title") // (GET) http://simhani1.shop:9000/app/product?title=
+    public BaseResponse<List<GetArticlesByTitleRes>> searchArticlesByTitle(@RequestParam String title) {
         try {
-            List<GetArticleRes> GetArticlesRes = productProvider.searchArticlesByTitle();
-            return new BaseResponse<>(GetArticlesRes);
+            List<GetArticlesByTitleRes> getArticlesByTitleRes = productProvider.searchArticlesByTitle(title);
+            return new BaseResponse<>(getArticlesByTitleRes);
         } catch (BaseException exception) {
             return new BaseResponse<>((exception.getStatus()));
         }

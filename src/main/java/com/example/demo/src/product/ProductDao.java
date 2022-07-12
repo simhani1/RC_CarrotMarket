@@ -129,7 +129,7 @@ public class ProductDao {
     //////////////////////////////////////  GET
 
     // 전체 판매 글 목록 조회(홈화면) (Get)
-    public List<GetArticleByUserIdRes> getArticles() {
+    public List<GetArticleByUserNicknameRes> getArticles() {
         String getArticlesQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
                 "    Product.title as 'title',\n" +
@@ -151,7 +151,7 @@ public class ProductDao {
                 "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and ProductImg.mainImg = true\n" +
                 "order by Product.updatedAt desc";
         return this.jdbcTemplate.query(getArticlesQuery,
-                (rs, rowNum) -> new GetArticleByUserIdRes (
+                (rs, rowNum) -> new GetArticleByUserNicknameRes(
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
                         rs.getString("address"),
@@ -163,7 +163,7 @@ public class ProductDao {
     }
 
     // 특정 유저의 판매 글 조회(nickname) (Get)
-    public List<GetArticleByUserIdRes> getArticlesByNickname(String nickname) {
+    public List<GetArticleByUserNicknameRes> getArticlesByNickname(String nickname) {
         String getArticlesByNicknameQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
                 "    Product.title as 'title',\n" +
@@ -186,7 +186,7 @@ public class ProductDao {
                 "order by Product.updatedAt desc";
         String getArticlesByNicknameParams = nickname;
         return this.jdbcTemplate.query(getArticlesByNicknameQuery,
-                (rs, rowNum) -> new GetArticleByUserIdRes(
+                (rs, rowNum) -> new GetArticleByUserNicknameRes(
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
                         rs.getString("address"),
@@ -198,8 +198,8 @@ public class ProductDao {
     }
 
     // 판매 글 조회(판매 글 메인화면)(productId) (Get)
-    public GetArticleRes getArticleByProductId(int productId) {
-        String getArticleByProductIdQuery = "select\n" +
+    public GetMainArticleRes getArticleByProductId(int productId) {
+        String getMainArticleResQuery = "select\n" +
                 "    User.nickname as 'nickname',\n" +
                 "    User.profileImgUrl as 'profileImgUrl',\n" +
                 "    User.mannerTemp as 'mannerTemp',\n" +
@@ -228,9 +228,9 @@ public class ProductDao {
                 "    Product.`\bstatus` = 'N' and\n" +
                 "    Product.isHided = 'N' and\n" +
                 "    User.status = 'A'";
-        int getArticleByProductIdParams = productId;
-        return this.jdbcTemplate.queryForObject(getArticleByProductIdQuery,
-                (rs, rowNum) -> new GetArticleRes(
+        int getMainArticleResParams = productId;
+        return this.jdbcTemplate.queryForObject(getMainArticleResQuery,
+                (rs, rowNum) -> new GetMainArticleRes(
                         rs.getString("nickname"),
                         rs.getString("profileImgUrl"),
                         rs.getDouble("mannerTemp"),
@@ -244,7 +244,7 @@ public class ProductDao {
                         rs.getInt("heartCnt"),
                         rs.getString("price"),
                         rs.getString("negotiation")), // RowMapper(위의 링크 참조): 원하는 결과값 형태로 받기
-                getArticleByProductIdParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
+                getMainArticleResParams); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
     // 판매 글의 모든 사진 조회(Get)
@@ -261,8 +261,8 @@ public class ProductDao {
     }
 
     // 판매 글 검색(title) (Get)
-    public List<GetArticleRes> searchArticlesByTitle() {
-        String getArticlesQuery = "select\n" +
+    public List<GetArticlesByTitleRes> searchArticlesByTitle(String title) {
+        String searchArticlesByTitleQuery = "select\n" +
                 "    ProductImg.ProductImgUrl as 'productImgUrl',\n" +
                 "    Product.title as 'title',\n" +
                 "    User.address as 'address',\n" +
@@ -280,18 +280,19 @@ public class ProductDao {
                 "from Product\n" +
                 "    inner join ProductImg on Product.productId = ProductImg.productId\n" +
                 "    inner join User on Product.userId = User.userId\n" +
-                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and Product.title like '%?%' and ProductImg.mainImg = true\n" +
+                "where Product.`\bstatus` = 'N' and Product.isHided = 'N' and Product.condition != 'F' and Product.title like ? and ProductImg.mainImg = true\n" +
                 "order by Product.updatedAt desc";
-        return this.jdbcTemplate.query(getArticlesQuery,
-                (rs, rowNum) -> new GetArticleRes (
+        String searchArticlesByTitleParams = '%' + title  + '%';
+        return this.jdbcTemplate.query(searchArticlesByTitleQuery,
+                (rs, rowNum) -> new GetArticlesByTitleRes(
                         rs.getString("productImgUrl"),
                         rs.getString("title"),
                         rs.getString("address"),
                         rs.getString("updatedAt"),
                         rs.getInt("chatRoomCnt"),
                         rs.getInt("heartCnt"),
-                        rs.getString("price"))
-        );
+                        rs.getString("price")),
+                searchArticlesByTitleParams);
     }
 
     // 특정 유저(본인)의 숨김 내역 조회(userId) (Get)
