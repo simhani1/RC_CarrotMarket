@@ -110,6 +110,16 @@ public class UserController {
     //////////////////////////////////////  GET
 
     /**
+     * 카카오 로그인 API
+     * [GET] /users/kakao
+     */
+    @ResponseBody
+    @GetMapping("/kakao")
+    public void  kakaoCallback(@RequestParam String code) throws BaseException {
+        System.out.println(code);  // 카카오로부터 받은 인가코드
+    }
+
+    /**
      * 모든 회원들의  조회 API
      * [GET] /users
      */
@@ -223,17 +233,6 @@ public class UserController {
             return new BaseResponse<>((exception.getStatus()));
         }
     }
-
-    /**
-     * 카카오 로그인 API
-     * [GET] /users/kakao
-     */
-    @ResponseBody
-    @GetMapping("/kakao")
-    public void  kakaoCallback(@RequestParam String code) throws BaseException {
-        System.out.println(code);  // 카카오로부터 받은 인가코
-    }
-
     //////////////////////////////////////  PATCH
 
     /**
