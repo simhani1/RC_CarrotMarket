@@ -68,6 +68,14 @@ public class UserProvider {
         }
     }
 
+    // 탈퇴한 유저인지 확인
+    public boolean checkStatus(PostLoginReq postLoginReq) throws BaseException {
+        String telephoneNum = postLoginReq.getTelephoneNum();
+        boolean status = userDao.checkStatus(telephoneNum);
+        if(!status)
+            return false;
+        return true;
+    }
 //
 //    // 해당 휴대폰 번호가 이미 User Table에 존재하는지 확인
 //    public int checkPhoneNumber(String phoneNumber) throws BaseException {

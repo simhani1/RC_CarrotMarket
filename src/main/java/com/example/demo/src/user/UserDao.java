@@ -117,6 +117,22 @@ public class UserDao {
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    // 탈퇴한 유저인지 확인
+    public boolean checkStatus(String telephoneNum) {
+        String checkStatusQuery = "select\n" +
+                "    status\n" +
+                "from User\n" +
+                "where telephoneNum = ?";
+        String checkStatusParams = telephoneNum;
+        String status = jdbcTemplate.queryForObject(checkStatusQuery,
+                (rs, rowNum) -> new CheckStatus(
+                        rs.getString("status")
+                ),
+                checkStatusParams).getStatus();
+        if(status.equals("D"))
+            return false;
+        return true;
+    }
     //////////////////////////////////////  GET
 
     // 전체 회원정보 조회

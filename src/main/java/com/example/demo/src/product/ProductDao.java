@@ -58,10 +58,10 @@ public class ProductDao {
 
     // 판매 글 삭제 (Patch)
     public int removeProduct(PatchProductReq patchProductReq) {
-        String removeProductQuery = "UPDATE RC_CarrotMarket.Product\n" +
-                "SET `\bstatus` = 'Y'\n" +
-                "WHERE productId = ? "; // 해당 userId를 만족하는 User를 해당 nickname으로 변경한다.
-        int removeProductParams = patchProductReq.getProductId(); // 주입될 값들(nickname, userId) 순
+        String removeProductQuery = "UPDATE Product\n" +
+                "SET Product.`\bstatus` = 'N'\n" +
+                "WHERE productId = ? and userID = ?";
+        Object[] removeProductParams = new Object[]{patchProductReq.getProductId(), patchProductReq.getUserId()};
         return this.jdbcTemplate.update(removeProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
@@ -69,9 +69,9 @@ public class ProductDao {
     public int updateProduct(PatchProductReq updateProductReq) {
         String updateProductQuery = "update Product\n" +
                 "set updatedAt=current_time\n" +
-                "where Product.productId = ? ";
-        int removeProductParams = updateProductReq.getProductId();
-        return this.jdbcTemplate.update(updateProductQuery, removeProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
+                "WHERE productId = ? and userID = ?";
+        Object[] updateProductParams = new Object[]{updateProductReq.getProductId(), updateProductReq.getUserId()};
+        return this.jdbcTemplate.update(updateProductQuery, updateProductParams); // 대응시켜 매핑시켜 쿼리 요청(생성했으면 1, 실패했으면 0)
     }
 
     // 판매 글 제목 수정 (Patch)

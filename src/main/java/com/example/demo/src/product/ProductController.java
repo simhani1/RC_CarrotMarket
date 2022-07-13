@@ -182,21 +182,19 @@ public class ProductController {
      * [PATCH] /status/:productId
      */
     @ResponseBody
-    @PatchMapping("/status/delete/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:productId
-    public BaseResponse<String> removeProduct(@PathVariable("productId") int productId) {
+    @PatchMapping("/status/delete/{userId}/{productId}") // (GET) http://simhani1.shop:9000/app/product/delete/:userId/:productId
+    public BaseResponse<String> removeProduct(@PathVariable("userId") int userId, @PathVariable("productId") int productId) {
         try {
-/*
-  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-            //jwt에서 idx 추출.
-            int productIdByJwt = jwtService.getProductIdx();
-            //productId와 접근한 유저가 같은지 확인
-            if(productId != productIdByJwt){
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            //같다면 유저네임 변경
-  **************************************************************************
- */
-            PatchProductReq removeProductReq = new PatchProductReq(productId);
+            //////////////////////////////////////  JWT
+            PatchProductReq removeProductReq = new PatchProductReq(userId, productId);
             productService.removeProduct(removeProductReq);
             String result = "글이 삭제되었습니다.";
             return new BaseResponse<>(result);
@@ -210,21 +208,19 @@ public class ProductController {
      * [PATCH] /status/up/:productId
      */
     @ResponseBody
-    @PatchMapping("/status/up/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:productId
-    public BaseResponse<String> updateProduct(@PathVariable("productId") int productId) {
+    @PatchMapping("/status/up/{userId}/{productId}") // (GET) http://simhani1.shop:9000/app/product/status/:userId/:productId
+    public BaseResponse<String> updateProduct(@PathVariable("userId") int userId, @PathVariable("productId") int productId) {
         try {
-/*
-  *********** 해당 부분은 7주차 - JWT 수업 후 주석해체 해주세요!  ****************
-            //jwt에서 idx 추출.
-            int productIdByJwt = jwtService.getProductIdx();
-            //productId와 접근한 유저가 같은지 확인
-            if(productId != productIdByJwt){
+            // 해당 회원이 맞는지 검사
+            //////////////////////////////////////  JWT
+            //jwt에서 idx 추출
+            int userIdByJwt = jwtService.getUserId();
+            //userId와 접근한 유저가 같은지 확인
+            if (userId != userIdByJwt) {
                 return new BaseResponse<>(INVALID_USER_JWT);
             }
-            //같다면 유저네임 변경
-  **************************************************************************
- */
-            PatchProductReq updateProductReq = new PatchProductReq(productId);
+            //////////////////////////////////////  JWT
+            PatchProductReq updateProductReq = new PatchProductReq(userId, productId);
             productService.updateProduct(updateProductReq);
             String result = "끌어올리기를 성공하였습니다.";
             return new BaseResponse<>(result);
