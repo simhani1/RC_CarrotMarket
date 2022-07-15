@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -115,8 +117,19 @@ public class UserController {
      */
     @ResponseBody
     @GetMapping("/kakao")
-    public void  kakaoCallback(@RequestParam String code) throws BaseException {
-        System.out.println(code);  // 카카오로부터 받은 인가코드
+    public void kakaoCallback(@RequestParam String code, HttpSession session) throws BaseException {
+        System.out.println(code);
+        String access_Token = userService.getAccessToken(code);
+        System.out.println("controller access_token : " + access_Token);
+        HashMap<String, Object> userInfo = userService.getUserInfo(access_Token);
+        System.out.println("login Controller : " + userInfo);
+        //    클라이언트의 이메일이 존재할 때 세션에 해당 이메일과 토큰 등록
+        if (userInfo.get("email") != null) {
+            session.setAttribute("userId", userInfo.get("email"));
+            session.setAttribute("access_Token", access_Token);
+        }
+        PostKakaoLoginRes postLoginRes = userProvider.kakaoLogin(userInfo);
+
     }
 
     /**

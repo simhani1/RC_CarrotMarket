@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static com.example.demo.config.BaseResponseStatus.*;
@@ -66,6 +67,14 @@ public class UserProvider {
         } else { // 비밀번호가 다르다면 에러메세지를 출력한다.
             throw new BaseException(FAILED_TO_LOGIN);
         }
+    }
+
+    // 카카오 로그인
+    public PostKakaoLoginRes kakaoLogin(HashMap<String, Object> userInfo) throws BaseException {
+        String nickname = (String) userInfo.get("nickname");
+        String email = (String) userInfo.get("email");
+        //return new PostKakaoLoginRes(userId, nickname, email);
+        return userDao.kakaoLogin(nickname, email);
     }
 
     // 탈퇴한 유저인지 확인

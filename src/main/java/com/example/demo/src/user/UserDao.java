@@ -117,6 +117,19 @@ public class UserDao {
         ); // 한 개의 회원정보를 얻기 위한 jdbcTemplate 함수(Query, 객체 매핑 정보, Params)의 결과 반환
     }
 
+    // 카카오 로그인
+    public PostKakaoLoginRes kakaoLogin(String nickname, String email) {
+        String getUserId = "";
+        String userNicknameParams = nickname;
+        return this.jdbcTemplate.queryForObject(getUserId,
+                (rs, rowNum) -> new PostKakaoLoginRes(
+                        rs.getInt("userId"),
+                        rs.getString("nickniame"),
+                        rs.getString("email")),
+                userNicknameParams
+                );
+    }
+
     // 탈퇴한 유저인지 확인
     public boolean checkStatus(String telephoneNum) {
         String checkStatusQuery = "select\n" +
